@@ -1,0 +1,294 @@
+<!doctype html>
+<html land="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width = device-width, initial-scale= 1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title></title>
+  </head>
+  <body class="min-h-screen w-full flex flex-col justify-between items-center">
+    <header
+      class="flex w-full justify-between items-center p-4 px-16 border-b-2 border-gray-300"
+    >
+      <div><h2 class="font-bold text-[#2563EB] text-xl">TransitKey</h2></div>
+      <nav
+        class="flex justify-center items-center w-1/2 text-1xl text-gray-700 font-medium gap-4"
+      >
+        <span><a href="#" class="hover:underline">Home</a></span>
+        <span><a href="#" class="hover:underline">Route</a></span>
+        <span><a href="#" class="hover:underline">Details</a></span>
+        <span><a href="#" class="hover:underline">Map</a></span>
+        <span><a href="#" class="hover:underline">Report</a></span>
+        <span><a href="#" class="hover:underline">Notification</a></span>
+        <span><a href="#" class="hover:underline">Profile</a></span>
+      </nav>
+      <div>
+        <button class="bg-[#2563EB] text-white p-2 px-4">Sign-up/Login</button>
+      </div>
+    </header>
+
+    <main class="m-0 px-6 w-full flex flex-col flex-1 p-4 gap-3">
+      <section class="w-full h-24 border-4 p-3 flex items-center gap-2">
+        <div class="w-2/5 ">
+          <p class="font-semibold">Current Location</p>
+          <!-- <span><img src="" alt="" /></span> -->
+          <span class="w-full"><input class="border-4 p-2 w-full text-sm font-semibold" type="text" placeholder="Central Business Area" /></span>
+        </div>
+
+        <div class="w-2/5">
+          <p class="font-semibold">Destination</p>
+          <!-- <span><img src="" alt="" /></span> -->
+          <span><input class="border-4 p-2 w-full text-sm font-semibold" type="text" placeholder="Enter Destination" /></span>
+        </div>
+
+        <div class="w-1/5 flex h-full items-end">
+          <button class="bg-blue-500 w-full text-sm font-semibold p-2.5">
+            <span><img src="" alt="" /></span> <span class="font-semibold">Check Routes</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Second section with the available routes -->
+      <section class="w-full h-3/4 flex gap-4">
+        <div class="flex flex-col gap-2 w-4/5">
+          <div><h2 class="font-semibold">Available Routes</h2></div>
+
+          <div class="border-4 flex justify-between px-6 p-3 items-center">
+            <!-- // Bigger div with the border -->
+            <div class="flex">
+              <!-- //div with bus image and weird text -->
+              <div>
+                <!-- // bus image -->
+                <img src="" alt="" />
+              </div>
+
+              <div class="flex flex-col gap-1">
+                <!-- // div with ekiti written in it -->
+                <div>
+                  <span>
+                    <p class="text-sm font-semibold flex items-center gap-1">
+                     <span> Ekiti </span><span><img src="" alt="" /></span><span>CMS(BRT)</span>
+                    </p>
+                  </span>
+                </div>
+
+                <div>
+                  <!-- // Express route via Ikorodu road -->
+                  <p class="text-sm font-medium">Express route via Ikorudu road</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="gap-1 flex flex-col">
+              <!-- //second div -->
+              <span>
+                <p class="text-xs font-medium text-end">ARRIVAL</p>
+              </span>
+              <span>
+                <p class="text-sm font-medium">10:45 AM</p>
+              </span>
+            </div>
+
+            <div class="gap-1 flex flex-col">
+              <!-- //third div -->
+              <span>
+                <p  class="text-xs font-medium text-end">DURATION</p>
+              </span>
+              <span>
+                <p class="text-sm font-medium">15 mins</p>
+              </span>
+            </div>
+
+
+            <div class="gap-1 flex flex-col">
+              <span>
+                <p class="text-xs font-medium text-end">FARE</p>
+              </span>
+              <span>
+                <p class="text-sm font-medium">#1000</p>
+              </span>
+            </div>
+
+            <div>
+              <button class="border-2 p-2 text-sm">Select Route</button>
+            </div>
+          </div>
+
+
+          <div class="border-4 flex justify-between px-6 p-3 items-center">
+            <!-- //Second Bigger div with the border -->
+            <div class="flex">
+              <!-- //div with bus image and weird text -->
+              <div>
+                <!-- // bus image -->
+                <img src="" alt="" />
+              </div>
+
+              <div class="flex flex-col gap-1">
+                <!-- // div with ekiti written in it -->
+                <div>
+                  <span>
+                    <p class="text-sm font-semibold flex items-center gap-1">
+                      <span>Lagos</span> <span><img src="" alt="" /></span><span>Ondo</span>
+                    </p>
+                  </span>
+                </div>
+
+                <div>
+                  <p class="text-sm font-medium">Danfo route through Ojota & Mary!</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="gap-1 flex flex-col">
+              <!-- //second div -->
+              <span>
+                <p class="text-xs font-medium text-end">ARRIVAL</p>
+              </span>
+              <span>
+                <p class="text-sm font-medium">10:52 AM</p>
+              </span>
+            </div>
+
+            <div class="gap-1 flex flex-col">
+              <!-- //third div -->
+              <span>
+                <p class="text-xs font-medium text-end">DURATION</p>
+              </span>
+              <span>
+                <p class="text-sm font-medium">25 mins</p>
+              </span>
+            </div>
+
+
+            <div class="gap-1 flex flex-col">
+              <span>
+                <p class="text-xs font-medium text-end">FARE</p>
+              </span>
+              <span>
+                <p class="text-sm font-medium">#1,500</p>
+              </span>
+            </div>
+
+            <div>
+              <button class="border-2 p-2 text-sm">Select Route</button>
+            </div>
+          </div>
+
+
+          <div class="border-4 flex justify-between px-6 p-3 items-center">
+            <!-- // Third Bigger div with the border -->
+            <div class="flex">
+              <!-- //div with bus image and weird text -->
+              <div>
+                <!-- // bus image -->
+                <img src="" alt="" />
+              </div>
+
+              <div class="flex flex-col gap-1">
+                <div>
+                  <span>
+                    <p class="text-sm font-semibold flex items-center gap-1">
+                      <span>Yaba</span> <span><img src="" alt="" /></span><span>Dekki Phase 1</span>
+                    </p>
+                  </span>
+                </div>
+                <div>
+                  <p class="text-sm font-medium">Direct route via Third Mainland</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="gap-1 flex flex-col">
+              <!-- //second div -->
+              <span>
+                <p class="text-xs font-medium text-end">ARRIVAL</p>
+              </span>
+              <span>
+                <p class="text-sm font-medium">11:05 AM</p>
+              </span>
+            </div>
+
+
+            <div class="gap-1 flex flex-col">
+              <!-- //third div -->
+              <span>
+                <p class="text-xs font-medium text-end">DURATION</p>
+              </span>
+              <span>
+                <p class="text-sm font-medium">42 mins</p>
+              </span>
+            </div>
+
+            <div class="gap-1 flex flex-col">
+              <span>
+                <p class="text-xs font-medium text-end">FARE</p>
+              </span>
+              <span>
+                <p class="text-sm font-medium">#3,500</p>
+              </span>
+            </div>
+            <div>
+              <button class="border-2 p-2 text-sm">Select Route</button>
+            </div>
+          </div>
+        </div>
+
+
+
+        <!-- Live Route Map -->
+        <div class="flex flex-col w-1/5 h-full gap-4">
+          <div class="h-4/5 border-4 p-2 flex flex-col gap-2">
+            <div class="flex flex-col gap-1">
+              <span><p class="font-semibold text-center text-sm">Live Route Map</p></span>
+              <span><hr class="border-1 w-full"/></span>
+            </div>
+
+            <div>
+              <img src="https://res.cloudinary.com/dk10vcfuz/image/upload/v1780253557/49761da5-65df-4f5f-a25a-6dce81c1fcdc.png" alt="A live map">
+              <!--Template inject spot for live route map-->
+            </div>
+          </div>
+
+          <div class=" flex flex-col gap-2 p-2 border-4 h-1/5">
+            <div><p class="font-medium text-sm">Quick Stats</p></div>
+
+            <div><hr class="border-1 w-full"/></div>
+
+            <div class="font-medium text-sm flex justify-between">
+              <span><p>Active Buses</p></span>
+              <span><p>15</p></span>
+            </div>
+
+            <div><hr class="border-1 w-full"/></div>
+
+            <div class="font-medium text-sm flex justify-between">
+              <span><p>Trafic Situation</p></span>
+              <span><p>Low</p></span>
+            </div>
+
+            <div><hr class="border-1 w-full" /></div>
+
+            <div class="font-medium text-sm flex justify-between">
+              <span><p>Road Delay</p></span>
+              <span><p class="text-red-500">High</p></span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <footer
+      class="bg-[#C2C2C2] border-t-4 flex justify-end items-center w-full gap-16 px-16 py-1 border-gray-300 text-[#4B5563] text-sm font-normal"
+    >
+      <div><p>@ 2026 TransitKey. All rights reserved</p></div>
+      <div class="flex gap-4">
+        <span><a href="#">Privacy Policy</a> </span>
+        <span><a href="#">Terms of Service</a></span>
+        <span><a href="#">Help Center</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

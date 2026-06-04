@@ -1,0 +1,211 @@
+<!doctype html>
+<html land="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width = device-width, initial-scale= 1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title></title>
+  </head>
+  <body class="min-h-screen w-full flex flex-col justify-between items-center">
+    <header
+      class="flex w-full justify-between items-center p-4 px-16 border-b-2 border-gray-300"
+    >
+      <div><h2 class="font-bold text-[#2563EB] text-xl">TransitKey</h2></div>
+      <nav
+        class="flex justify-center items-center w-1/2 text-1xl text-gray-700 font-medium gap-4"
+      >
+        <span><a href="#" class="hover:underline">Home</a></span>
+        <span><a href="#" class="hover:underline">Route</a></span>
+        <span><a href="#" class="hover:underline">Details</a></span>
+        <span><a href="#" class="hover:underline">Map</a></span>
+        <span><a href="#" class="hover:underline">Report</a></span>
+        <span><a href="#" class="hover:underline">Notification</a></span>
+        <span><a href="#" class="hover:underline">Profile</a></span>
+      </nav>
+      <div>
+        <button class="bg-[#2563EB] text-white p-2 px-4">Sign-up/Login</button>
+      </div>
+    </header>
+
+    <main class="px-8 gap-4 flex flex-1 w-full border-[#C2C2C2]">
+      <section class="w-4/5 flex flex-1 justify-between py-2 flex-col gap-4">
+        <div class="flex flex-col w-full">
+          <div class="font-semibold">
+            <span>
+              <p class="flex gap-2 items-center">
+                <span>Oshodi</span> <span class="w-20"><img src="https://res.cloudinary.com/dk10vcfuz/image/upload/v1780504464/arrow_image_no72vl.png" alt="an arrow " /></span>
+                <span>CMS (BRT)</span>
+              </p>
+            </span>
+          </div>
+          <div class="text-sm font-semibold">
+            <span>
+              <p>
+                Trip ID: <span>#LAG-882910</span> | <span>Active Trip</span>
+              </p>
+              <!--Used extra span to allow easy modification of element's content-->
+            </span>
+          </div>
+        </div>
+
+        <div class="flex justify-between gap-2">
+          <div class="border-4 w-1/3 p-2 flex flex-col gap-1 font-semibold">
+            <span>
+              <p class="text-sm">ARRIVAL TIME</p>
+            </span>
+            <span>
+              <p>10:45 AM</p>
+            </span>
+          </div>
+
+          <div class="border-4 w-1/3 p-2 flex flex-col gap-1 font-semibold">
+            <span>
+              <p class="text-sm">CURRENT FARE</p>
+            </span>
+            <span>
+              <p>₦1,200</p>
+            </span>
+          </div>
+
+          <div class="border-4 w-1/3 p-2 flex flex-col gap-1 font-semibold">
+            <span>
+              <p class="text-sm">BUS STATUS</p>
+            </span>
+            <span>
+              <p>Approaching Ojota</p>
+            </span>
+          </div>
+        </div>
+
+        <div class="bg-[#33C7CC] flex flex-col gap-2 p-4">
+          <div><p class="font-semibold">FLEET INFORMATION</p></div>
+          
+          <div class="flex justify-between items-center">
+            <div class="flex w-1/3 gap-2 items-center w-1/3">
+              <div><img class="rounded-full w-24 h-24 object-cover" src="https://res.cloudinary.com/dk10vcfuz/image/upload/v1780504791/driver_image_vhvy7u.jpg" alt="Driver's Picture" /></div>
+              <div>
+                <span><p>DRIVER</p></span>
+                <span><p>Asewale Musa</p></span>
+              </div>
+            </div>
+
+            <div class="flex w-1/3 gap-2 items-center w-1/3">
+              <div><img class="rounded-full w-24 h-24 object-cover" src="" alt="Plate number" /></div>
+              <div>
+                <span><p>PLATE NUMBER</p></span>
+                <span><p>LND472YK</p></span>
+              </div>
+            </div>
+
+            <div class="flex w-1/3 gap-2 items-center w-1/3">
+              <div><img class="rounded-full w-24 h-24 object-cover" src="" alt="Bus Type" /></div>
+              <div>
+                <span><p>BUS TYPE</p></span>
+                <span><p>LAMMATA BRT Bus</p></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="flex flex-col gap-3 border-4 p-3 w-full">
+          <div><p class="text-sm font-semibold">TRIP PROGRESS</p></div>
+          <div class="flex gap-3">
+            <div class="py-2 flex w-1/12 flex-col justify-center items-center">
+              <!-- dots -->
+               <span class="w-6"><img src="https://res.cloudinary.com/dk10vcfuz/image/upload/v1780575159/black_circle_l55o2k.png" alt="A dot"></span>
+               <span><hr class="h-16 border-2 border-black"></span>
+               <span class="w-6"><img src="https://res.cloudinary.com/dk10vcfuz/image/upload/v1780575159/black_circle_l55o2k.png" alt="A dot"></span>
+               <span><hr class="h-16 border-2 border-black"></span>
+               <span class="w-6"><img src="https://res.cloudinary.com/dk10vcfuz/image/upload/v1780575159/black_circle_l55o2k.png" alt="A dot"></span>
+            </div>
+
+
+            <div class="w-11/12 flex justify-between flex-col w-full p- gap-3">
+
+              <div class=" flex justify-between items-center">
+                <div>
+                  <span
+                    ><p class="font-semibold">Origin: <span>Jibowu Bus Terminal</span></p></span
+                  >
+                  <span><p class="font-semibold text-sm">Terminal 3, Departure Bay</p></span>
+                </div>
+                <div><p class="font-semibold text-sm">09:15 AM</p></div>
+              </div>
+
+              <div class=" flex justify-between items-center">
+                <div>
+                  <span
+                    ><p class="font-semibold">Current: <span>Mowe</span></p></span
+                  >
+                  <span><p class="font-semibold text-sm">Approx. 15 mins to Ibadan</p></span>
+                </div>
+                <div><p class="font-semibold text-sm">In Transit</p></div>
+              </div>
+
+              <div class=" flex justify-between items-center">
+                <div>
+                  <span
+                    ><p class="font-semibold">Destination: <span>Ibadan</span></p></span
+                  >
+                  <span><p class="font-semibold text-sm">Ibadan Bus Terminal</p></span>
+                </div>
+                <div><p class="font-semibold text-sm">10:45 (Estimated)</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Second section for live map view -->
+      <section class="p-2 w-1/5 flex flex-col gap-4">
+        <div class="flex flex-col gap-2 justify-center items-center p-2 w-full border-4">
+          <div><p class="text-sm font-semibold">LIVE MAP VIEW</p></div>
+          <div class="border-t-4 p-2">
+            <img src="https://res.cloudinary.com/dk10vcfuz/image/upload/v1780253557/49761da5-65df-4f5f-a25a-6dce81c1fcdc.png" alt="Map image" />
+          </div>
+          <div class="w-full">
+            <button class="border-4 p-2 w-full ">TRACK IN FULLSCREEN</button>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1 text-sm font-medium justify-center p-2 border-4 gap-3">
+          <div><p>SUPPORT & ASSISTANCE</p></div>
+
+          <div class="flex items-center justify-center gap-2">
+            <span class="w-6"><img  src="https://res.cloudinary.com/dk10vcfuz/image/upload/v1780570659/Headphone_kq4kxe.jpg" alt="" /></span>
+            <span class="w-3/4"><a href="#">Contact Transport Support</a></span>
+          </div>
+
+          <div class="flex items-center justify-center gap-2">
+            <span class="w-6"><img src="https://res.cloudinary.com/dk10vcfuz/image/upload/v1780571260/warning_symbol_hl7apf.jpg" alt="A warning symbol" /></span>
+            <span class="w-3/4"><a href="#">Report Driver / Fare Issue</a></span>
+          </div>
+
+          <div class="flex items-center justify-center gap-2">
+            <span class="w-6"><img src="https://res.cloudinary.com/dk10vcfuz/image/upload/v1780571113/half_reverse_symbol_h9prwp.jpg" alt="A reverse symbol with time in the middle" /></span>
+            <span class="w-3/4"><a href="#">View Previous Trips</a></span>
+          </div>
+          <div>
+            <hr class="border-1 border-black"/>
+          </div>
+          <div class="flex items-center justify-center gap-2">
+            <span><p>Estimated Travel Time:</p></span>
+            <span><p>50 mins</p></span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer
+      class="bg-[#C2C2C2] border-t-4 flex justify-end items-center w-full gap-16 px-16 py-1 border-gray-300 text-[#4B5563] text-sm font-normal"
+    >
+      <div><p>@ 2026 TransitKey. All rights reserved</p></div>
+      <div class="flex gap-4">
+        <span><a href="#">Privacy Policy</a> </span>
+        <span><a href="#">Terms of Service</a></span>
+        <span><a href="#">Help Center</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

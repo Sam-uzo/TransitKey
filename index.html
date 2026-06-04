@@ -1,0 +1,134 @@
+<!doctype html>
+<html land="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width = device-width, initial-scale= 1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title></title>
+  </head>
+  <body class="min-h-screen w-full flex flex-col justify-between items-center">
+    <header
+      class="flex w-full justify-between items-center p-4 px-16 border-b-2 border-gray-300"
+    >
+      <div><h2 class="font-bold text-[#2563EB] text-xl">TransitKey</h2></div>
+      <nav
+        class="flex justify-center items-center w-1/2 text-1xl text-gray-700 font-medium gap-4"
+      >
+        <span><a href="#" class="hover:underline">Home</a></span>
+        <span><a href="#" class="hover:underline">Route</a></span>
+        <span><a href="#" class="hover:underline">Details</a></span>
+        <span><a href="#" class="hover:underline">Map</a></span>
+        <span><a href="#" class="hover:underline">Report</a></span>
+        <span><a href="#" class="hover:underline">Notification</a></span>
+        <span><a href="#" class="hover:underline">Profile</a></span>
+      </nav>
+      <div>
+        <button class="bg-[#2563EB] text-white p-2 px-4">Sign-up/Login</button>
+      </div>
+    </header>
+
+    <main
+      class="p-8 flex justify-center items-center border-4 border-[#C2C2C2]"
+    >
+      <section class="flex flex-col w-full justify-center gap-4">
+        <div>
+          <span><h2 class="text-xl font-semibold">Create Account</h2></span>
+          <span
+            ><p class="text-sm font-medium text-[]">
+              Join the TransitKey network for efficient logistics management.
+            </p></span
+          >
+        </div>
+
+        <div>
+          <span><p class="font-medium">Full Name</p></span>
+          <span
+            ><input
+              class="text-sm border-2 w-full p-2 border-[#C2C2C2]"
+              type="text"
+              placeholder="Isaiah Adebayo"
+          /></span>
+        </div>
+
+        <div>
+          <span><p class="font-medium">Phone Number</p></span>
+          <span
+            ><input
+              class="text-sm border-2 w-full p-2 border-[#C2C2C2]"
+              type="tel"
+              placeholder="+234 08095674832"
+          /></span>
+        </div>
+        <div>
+          <span><p class="font-medium">Email Address</p></span>
+          <span
+            ><input
+              class="text-sm border-2 w-full p-2 border-[#C2C2C2]"
+              type="email"
+              placeholder="name@gmail.com"
+          /></span>
+        </div>
+
+        <div class="flex flex-col w-full">
+          <div class="flex w-full gap-4">
+            <div class="w-1/2">
+              <span><p class="font-medium">Password</p></span>
+              <span
+                ><input
+                  class="font-bold text-base border-2 w-full p-1 border-[#C2C2C2]"
+                  type="password"
+                  placeholder="--- --- ---"
+              /></span>
+            </div>
+
+            <div class="w-1/2">
+              <span><p class="font-medium">Confirm Password</p></span>
+              <span
+                ><input
+                  class="font-bold text-base border-2 w-full p-1 border-[#C2C2C2]"
+                  type="password"
+                  placeholder="--- --- ---"
+              /></span>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <span><input class="hover:cursor-pointer" type="checkbox" /></span>
+            <span>
+              <p class="text-sm font-medium">
+                I agree to the
+                <span class="underline"><a href="#">Terms of Service</a></span>
+                and <span class="underline"><a href="#">Privacy Policy</a></span
+                >.
+              </p>
+            </span>
+          </div>
+        </div>
+
+        <div class="py-4 w-full flex flex-col justify-center items-center">
+          <div class="w-full">
+            <button class="p-2 w-full text-white bg-[#2563EB]">
+              CREATE ACCOUNT
+            </button>
+          </div>
+          <div class="p-4">
+            <a href="#" class="text-[#2563EB]"
+              >Already have an account? <span class="font-bold">Log in</span></a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer
+      class="bg-[#C2C2C2] border-t-4 flex justify-end items-center w-full gap-16 px-16 py-1 border-gray-300 text-[#4B5563] text-sm font-normal"
+    >
+      <div><p>@ 2026 TransitKey. All rights reserved</p></div>
+      <div class="flex gap-4">
+        <span><a href="#">Privacy Policy</a> </span>
+        <span><a href="#">Terms of Service</a></span>
+        <span><a href="#">Help Center</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

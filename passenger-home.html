@@ -1,0 +1,172 @@
+<!doctype html>
+<html land="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width = device-width, initial-scale= 1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title></title>
+  </head>
+  <body class="min-h-screen w-full flex flex-col justify-between items-center">
+    <header
+      class="flex w-full justify-between items-center p-4 px-16 border-b-2 border-gray-300"
+    >
+      <div><h2 class="font-bold text-[#2563EB] text-xl">TransitKey</h2></div>
+      <nav
+        class="flex justify-center items-center w-1/2 text-1xl text-gray-700 font-medium gap-4"
+      >
+        <span><a href="#" class="hover:underline">Home</a></span>
+        <span><a href="#" class="hover:underline">Route</a></span>
+        <span><a href="#" class="hover:underline">Details</a></span>
+        <span><a href="#" class="hover:underline">Map</a></span>
+        <span><a href="#" class="hover:underline">Report</a></span>
+        <span><a href="#" class="hover:underline">Notification</a></span>
+        <span><a href="#" class="hover:underline">Profile</a></span>
+      </nav>
+      <div>
+        <button class="bg-[#2563EB] text-white p-2 px-4">Sign-up/Login</button>
+      </div>
+    </header>
+
+    <main class=" m-0 px-10 w-full flex flex-1 p-4 gap-3">
+      <section class="m-0 w-3/4 flex flex-col gap-6">
+        <div class="w-full border-4 p-2 px-4 gap-2 flex flex-col">
+          <div><h2 class="font-medium">Quick Route Search</h2></div>
+          <div class="flex items-center gap-1.5 w-full ">
+            <div class="w-1/3">
+              <span><p class="text-sm font-medium">From</p></span>
+              <span class="w-3 absolute top-0"><img  src="https://res.cloudinary.com/dk10vcfuz/image/upload/v1780253557/49761da5-65df-4f5f-a25a-6dce81c1fcdc.png" alt="Location icon"></span>
+              <span class="relative"><input class="w-full border-4 p-1"  type="text" placeholder="Origin Station" /></span>
+            </div>
+            <div class="w-1/3">
+              <span><p class="text-sm font-medium">To</p></span>
+              <span
+                ><input class="w-full border-4 p-1"   type="text" placeholder="Destination Station"
+              /></span>
+            </div>
+            <div class="w-1/3 flex flex-col justify-end h-full">
+              <button class="py-2 p-1 bg-blue-500 w-full ">FIND ROUTE</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full flex flex-col gap-3">
+          <div><h2 class="font-medium">Upcoming Trips Summary</h2></div>
+          <div class="w-full border-4">
+            <table class="w-full">
+              <thead class="w-full ">
+                <tr class="w-full bg-blue-500 ">
+                  <th class="text-left py-3 px-4">DATE/TIME</th>
+                  <th class="text-left py-3 px-4">ROUTE</th>
+                  <th class="text-center py-3 px-4">STATUS</th>
+                </tr>
+              </thead>
+              <tbody class="w-full">
+                <tr class="border-b-2">
+                  <td class="">
+                    <div class="flex flex-col p-3">
+                      <span class="text-gray-700 font-medium text-xs">24 MAY 2026</span>
+                      <span class="font-semibold text-sm">08:45 AM</span>
+                    </div>
+                  </td>
+                  <td class="font-semibold text-ms">Ikeja >>> Lekki</td>
+                  <td class="text-center">
+                    <span class="border-2 p-2 text-sm font-medium">CONFIRMED</span>
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>
+                    <div class="flex flex-col p-3">
+                      <span class="text-gray-700 font-medium text-xs">24 MAY 2026</span>
+                      <span class="font-semibold text-sm">02:45 PM</span>
+                    </div>
+                  </td>
+                  <td class="font-semibold text-ms">Utako >>> Lokogoma</td>
+                  <td class="text-center">
+                    <span class="border-2 p-2 text-sm font-medium">PENDING</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="flex flex-col w-full gap-3">
+          <div><h2 class="font-semibold">Recent Trip Activity</h2></div>
+          <div class="flex w-full gap-4">
+            <div class="flex flex-col w-1/2 border-4 justify-between p-3 gap-1">
+              <div class="flex justify-between items-center">
+                <span><p class="font-bold text-gray-700 text-xs">YESTERDAY</p></span>
+                <span>syb</span>
+              </div>
+              <div><p class="font-bold ">Mabushi Park</p></div>
+              <div><p class="font-bold text-gray-400 text-xs">Arrived at 10:30 PM</p></div>
+            </div>
+
+            <div class="flex flex-col w-1/2 border-4 justify-between p-3 gap-1">
+              <div class="flex justify-between items-center">
+                <span><p  class="font-bold text-gray-700 text-xs">YESTERDAY</p></span>
+                <span>syb</span>
+              </div>
+              <div><p  class="font-bold ">Magic Land</p></div>
+              <div><p class="font-bold text-gray-400 text-xs">Arrived at 12:30 PM</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="w-1/4 gap-3 flex flex-col">
+        <div class="border-4 p-2 bg-[#98B5F5] flex flex-col gap-3">
+          <div><p class="font-semibold text-sm">LIVE STATUS</p></div>
+          <div class="flex gap-2 items-center">
+            <div>redimg</div>
+            <div>
+              <span><p class="font-bold">Line A Delay</p></span
+              ><span><p class="font-medium text-sm">15 min delay due to maintenance at Ago Axis</p></span>
+            </div>
+          </div>
+          <div><hr class="border-gray-500"/></div>
+          <div class="flex gap-2 items-center">
+            <div>markimg</div>
+            <div>
+              <span><p class="font-bold">Line B Express</p></span
+              ><span><p class="font-medium text-sm">All services running on schedule</p></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-4 p-2 flex flex-col gap-4">
+          <div><p class="font-semibold ">Notifications</p></div>
+          <div class="bg-[#98B5F5] p-1 border-l-4 border-black">
+            <span><p class="text-xs font-semibold text-gray-700">10 MIN AGO</p></span>
+            <span><p class="text-sm font-semibold">Payment for trip successful.</p></span>
+          </div>
+          <div>
+            <span><p class="text-xs font-semibold text-gray-700">2 HOURS AGO</p></span>
+            <span><p class="text-sm font-semibold text-gray-700">Traffic jam around Ago axis.</p></span>
+          </div>
+
+          <div class="flex justify-center">
+            <button class="w-full text-sm  font-medium p-2 border-4">VIEW ALL NOTIFICATIONS</button>
+          </div>
+        </div>
+
+        <div class="flex bg-[#98B5F5] justify-between p-3">
+          <div class="flex flex-col gap-2"><span><p class="font-semibold text-sm text-gray-700">ACTIVE TICKETS</p></span><span><p class="font-bold text-xs">02</p></span></div>
+          <div class="flex flex-col gap-2" ><span><p class="font-semibold text-sm text-gray-700">TOTAL DISTANCE</p></span><span><p class="font-bold text-xs">124km</p></span></div>
+        </div>
+      </section>
+    </main>
+
+    <footer
+      class="bg-[#C2C2C2] border-t-4 flex justify-end items-center w-full gap-16 px-16 py-1 border-gray-300 text-[#4B5563] text-sm font-normal"
+    >
+      <div><p>@ 2026 TransitKey. All rights reserved</p></div>
+      <div class="flex gap-4">
+        <span><a href="#">Privacy Policy</a> </span>
+        <span><a href="#">Terms of Service</a></span>
+        <span><a href="#">Help Center</a></span>
+      </div>
+    </footer>
+  </body>
+</html>
