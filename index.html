@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width = device-width, initial-scale= 1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <title></title>
+    <title>Create Account</title>
   </head>
   <body class="min-h-screen w-full flex flex-col justify-between items-center">
     <header
@@ -14,21 +14,21 @@
       <nav
         class="flex justify-center items-center w-1/2 text-1xl text-gray-700 font-medium gap-4"
       >
-        <span><a href="#" class="hover:underline">Home</a></span>
-        <span><a href="#" class="hover:underline">Route</a></span>
-        <span><a href="#" class="hover:underline">Details</a></span>
-        <span><a href="#" class="hover:underline">Map</a></span>
-        <span><a href="#" class="hover:underline">Report</a></span>
-        <span><a href="#" class="hover:underline">Notification</a></span>
+        <span><a href="./passenger-home.html" class="hover:underline">Home</a></span>
+        <span><a href="./passenger-route.html" class="hover:underline">Route</a></span>
+        <span><a href="./passenger-details.html" class="hover:underline">Details</a></span>
+        <span><a href="./passenger-map.html" class="hover:underline">Map</a></span>
+        <span><a href="./passenger-report.html" class="hover:underline">Report</a></span>
+        <span><a href="./passenger-notification.html" class="hover:underline">Notification</a></span>
         <span><a href="#" class="hover:underline">Profile</a></span>
       </nav>
       <div>
-        <button class="bg-[#2563EB] text-white p-2 px-4">Sign-up/Login</button>
+        <button class="SignUp-btn bg-[#2563EB] text-white p-2 px-4">Sign-up/Login</button>
       </div>
     </header>
 
     <main
-      class="p-8 flex justify-center items-center border-4 border-[#C2C2C2]"
+      class="p-8 m-4 flex justify-center items-center border-4 border-[#C2C2C2]"
     >
       <section class="flex flex-col w-full justify-center gap-4">
         <div>
@@ -112,7 +112,7 @@
             </button>
           </div>
           <div class="p-4">
-            <a href="#" class="text-[#2563EB]"
+            <a href="passenger-login.html" class="text-[#2563EB]"
               >Already have an account? <span class="font-bold">Log in</span></a
             >
           </div>
@@ -130,5 +130,7 @@
         <span><a href="#">Help Center</a></span>
       </div>
     </footer>
+
+    <script type="module" src="./script.js"></script>
   </body>
 </html>
