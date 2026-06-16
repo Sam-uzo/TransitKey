@@ -1,8 +1,6 @@
-// ============================================================
 // script.js — Shared utilities for all TransitKey pages
-// ============================================================
 
-// ------- Sign-up / Login button handler -------
+//Sign-up / Login button handler
 export const signUpBtn = document.querySelector(".SignUp-btn");
 
 export function signUpBtnHandler() {
@@ -23,7 +21,7 @@ export function signUpBtnHandler() {
   }
 }
 
-// ------- Show error below an input -------
+//Shows error below an input
 export function showError(inputEl, message) {
   clearError(inputEl);
   inputEl.classList.add("border-red-500");
@@ -33,20 +31,23 @@ export function showError(inputEl, message) {
   inputEl.parentElement.appendChild(errorEl);
 }
 
-// ------- Clear error from an input -------
+//Clear error from an input
 export function clearError(inputEl) {
   inputEl.classList.remove("border-red-500");
   const existing = inputEl.parentElement.querySelector(".error-msg");
   if (existing) existing.remove();
 }
 
-// ------- Password strength checker -------
+//Password strength checker
 export function checkPasswordStrength(password) {
   if (password.length < 8) {
     return { valid: false, message: "Password must be at least 8 characters." };
   }
   if (!/[A-Z]/.test(password)) {
-    return { valid: false, message: "Must include at least one uppercase letter." };
+    return {
+      valid: false,
+      message: "Must include at least one uppercase letter.",
+    };
   }
   if (!/[0-9]/.test(password)) {
     return { valid: false, message: "Must include at least one number." };
@@ -54,18 +55,18 @@ export function checkPasswordStrength(password) {
   return { valid: true, message: "" };
 }
 
-// ------- Email validator -------
+//Email validator
 export function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-// ------- Nigerian phone validator -------
+//Nigerian phone validator
 export function isValidPhone(phone) {
   return /^(\+?234|0)[789][01]\d{8}$/.test(phone.replace(/\s/g, ""));
 }
 
-// ------- Toast notification -------
-export function showToast(message, type = "success") {
+//Toast notification
+export function showToast(message, type = "success", timing = 3500) {
   const existing = document.querySelector(".transitkey-toast");
   if (existing) existing.remove();
 
@@ -75,9 +76,19 @@ export function showToast(message, type = "success") {
   }`;
   toast.textContent = message;
   document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3500);
+  setTimeout(() => toast.remove(), timing);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   signUpBtnHandler();
 });
+
+export async function postMidWife(link, method, headers, credentials, data) {
+  let apiData = await fetch(link, {
+    method: method,
+    headers: headers,
+    Credentials: credentials,
+    body: JSON.stringify(data),
+  });
+  return apiData;
+}
