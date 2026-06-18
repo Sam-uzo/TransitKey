@@ -1,20 +1,23 @@
-// ============================================================
 // profile.js — passenger-profile.html logic
-// ============================================================
-import { showError, clearError, isValidEmail, isValidPhone, showToast } from "./script.js";
+
+import {
+  showError,
+  isValidEmail,
+  isValidPhone,
+  clearError,
+  showToast,
+} from "./script.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-
-  // ------- Toggle switch (Push Notifications) -------
+  //Toggle switch (Push Notifications)
   const toggle = document.getElementById("toggle-notif");
+  const dot = toggle.querySelector("div");
+  const addRouteCard = document.querySelector(".border-dashed");
   if (toggle) {
-    // Remove the old inline onclick and use addEventListener
-    toggle.removeAttribute("onclick");
-    let isOn = true; // starts as ON (blue)
+    let isOn = true;
 
     toggle.addEventListener("click", () => {
       isOn = !isOn;
-      const dot = toggle.querySelector("div");
 
       if (isOn) {
         toggle.classList.remove("bg-gray-300");
@@ -33,10 +36,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ------- EDIT INFORMATION button with validation -------
-  const nameInput  = document.querySelector('input[placeholder="Isaiah Adebayo"]');
-  const phoneInput = document.querySelector('input[placeholder="+234 08095674832"]');
-  const emailInput = document.querySelector('input[placeholder="name@gmail.com"]');
-  const editBtn    = document.querySelector("button.bg-\\[\\#93C5FD\\]");
+  const nameInput = document.querySelector(
+    'input[placeholder="Isaiah Adebayo"]',
+  );
+  const phoneInput = document.querySelector(
+    'input[placeholder="+234 08095674832"]',
+  );
+  const emailInput = document.querySelector(
+    'input[placeholder="name@gmail.com"]',
+  );
+  const editBtn = document.querySelector("button.bg-\\[\\#93C5FD\\]");
 
   let isEditing = false;
 
@@ -60,7 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
           el.classList.remove("text-gray-400");
         }
       });
-      return;
     }
 
     // Save mode — validate before saving
@@ -106,12 +114,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ------- ADD NEW ROUTE -------
-  const addRouteCard = document.querySelector(".border-dashed");
+
   addRouteCard?.addEventListener("click", () => {
     showToast("Route saving coming soon.");
   });
 
-  // ------- Contact Support -------
+  //Contact Support
   document.querySelectorAll("button").forEach((btn) => {
     if (btn.textContent.includes("Contact Support")) {
       btn.addEventListener("click", () => {
@@ -130,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ------- Two-Factor Auth and Manage Payment links -------
+  // Two-Factor Auth and Manage Payment links
   document.querySelectorAll("a.underline").forEach((link) => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
@@ -143,3 +151,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+
+fetch("https://transitkey-backend.vercel.app/api/route")
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    console.log(data);
+  });

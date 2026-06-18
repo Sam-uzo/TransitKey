@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     async function registerUser() {
       await postMidWife(
-        "https://transitkey-backend.onrender.com/api/auth/register",
+        "https://transitkey-backend.vercel.app/api/auth/register",
         "POST",
         { "Content-Type": "application/json" },
         "include",

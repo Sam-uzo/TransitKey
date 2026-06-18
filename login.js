@@ -54,24 +54,40 @@ document.addEventListener("DOMContentLoaded", () => {
       // Backend login
       loginUser();
       async function loginUser() {
-        showToast("Logging in...");
-        await postMidWife(
-          "https://transitkey-backend.onrender.com/api/auth/login",
-          "POST",
-          { "Content-Type": "application/json" },
-          "include",
-          {
-            email: loginEmail,
-            password: loginPassword,
-          },
-        ).then((response) => {
-          console.log(response);
-        });
-        // setTimeout(() => {
-        //   window.location.href = "./passenger-home.html";
-        // }, 1500);
-      }
+        try {
+          showToast("Logging in...");
+          let userDetails;
+          let response = await postMidWife(
+            "https://transitkey-backend.vercel.app/api/auth/login",
+            "POST",
+            { "Content-Type": "application/json" },
+            "include",
+            {
+              number: loginEmail,
+              password: loginPassword,
+            },
+          );
 
+          userDetails = await response.json();
+
+          console.log(userDetails);
+          if (userDetails.message == "Success") {
+            showToast(`${userDetails.message}!`);
+            console.log(userDetails.user.name, userDetails.user.number);
+            sessionStorage.setItem("name", userDetails.user.name);
+            sessionStorage.setItem("number", userDetails.user.number);
+            setTimeout(() => {
+              window.location.href = "./passenger-home.html";
+            }, 1500);
+          } else {
+            console.log(userDetails.message);
+            showToast(`${userDetails.message}`);
+            sessionStorage.clear();
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
   });
 
