@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transitkey – Driver Dashboard</title>
+  <style>
+    :root {
+      --primary:       #2E3A8C;
+      --primary-dark1: #1B2562;
+      --primary-dark2: #111A4A;
+      --primary-light: #B0BAE8;
+      --accent:        #3B6FE8;
+      --accent-light:  #C8D4F8;
+      --black:         #141414;
+      --gray-700:      #3D3D3D;
+      --gray-600:      #5C5C5C;
+      --gray-500:      #6E6E6E;
+      --gray-400:      #8F8F8F;
+      --gray-300:      #B8B8B8;
+      --gray-200:      #D4D4D4;
+      --gray-100:      #E8E8E8;
+      --gray-50:       #F5F5F5;
+      --white:         #FFFFFF;
+      --success:       #00B37A;
+      --warning:       #F5A623;
+      --error:         #EF4B5E;
+      --page-bg:       #FFFFFF;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--page-bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: var(--black);
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-100);
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    .nav-logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--gray-600);
+      text-decoration: none;
+      transition: color 0.15s;
+      padding-bottom: 3px;
+    }
+
+    .nav-links a.active {
+      color: var(--black);
+      font-weight: 600;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .nav-links a:hover { color: var(--black); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .nav-clock {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-600);
+      letter-spacing: 0.3px;
+    }
+
+    /* ── PAGE BODY ── */
+    .page-body {
+      flex: 1;
+      padding: 32px 40px 40px;
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ── GREETING ── */
+    .greeting { margin-bottom: 24px; }
+
+    .greeting h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 6px;
+    }
+
+    .greeting p {
+      font-size: 14px;
+      color: var(--gray-600);
+    }
+
+    /* ── GRIDS ── */
+    .grid-top, .grid-bottom {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      border: 1.5px solid var(--accent);
+      border-radius: 8px;
+      padding: 24px 28px;
+      background: var(--white);
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    /* ── TRIP CARD ── */
+    .trip-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .trip-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .trip-route {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 24px;
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: 6px;
+      padding: 7px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--black);
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Status states */
+    .status-badge[data-status="in_progress"] { border-color: var(--success); color: var(--success); }
+    .status-badge[data-status="in_progress"] .status-dot { background: var(--success); animation: pulse 2s infinite; }
+
+    .status-badge[data-status="not_started"] { border-color: var(--warning); color: var(--warning); }
+    .status-badge[data-status="not_started"] .status-dot { background: var(--warning); }
+
+    .status-badge[data-status="ended"] { border-color: var(--gray-400); color: var(--gray-400); }
+    .status-badge[data-status="ended"] .status-dot { background: var(--gray-400); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .trip-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .meta-label {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-bottom: 4px;
+    }
+
+    .meta-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    .route-btn {
+      width: 100%;
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      height: 46px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .route-btn:hover { background: var(--primary); }
+    .route-btn:active { transform: scale(0.99); }
+
+    /* ── TRAFFIC CARD ── */
+    .traffic-row {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .traffic-row:last-child { border-bottom: none; }
+
+    .row-label {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-bottom: 4px;
+    }
+
+    .row-value-lg {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .row-value-sm {
+      font-size: 13px;
+      color: var(--gray-700);
+      line-height: 1.5;
+    }
+
+    .row-value-inline {
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .delay-low  { font-weight: 700; color: var(--success); }
+    .delay-med  { font-weight: 700; color: var(--warning); }
+    .delay-high { font-weight: 700; color: var(--error); }
+
+    .alt-route {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--gray-600);
+    }
+
+    /* ── ACTIVITY CARD ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      border: 1.5px solid var(--gray-200);
+      border-radius: 6px;
+      padding: 14px 12px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    .stat-box:hover { border-color: var(--accent); }
+
+    .stat-num {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--gray-500);
+      line-height: 1.3;
+    }
+
+    .activity-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: 14px;
+    }
+
+    .activity-row:last-child { border-bottom: none; }
+    .row-key { color: var(--black); }
+    .row-val { font-weight: 600; color: var(--black); }
+    .row-val.accent { color: var(--accent); }
+
+    /* ── NOTIFICATIONS CARD ── */
+    .notif-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .view-all {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--black);
+      text-decoration: underline;
+      cursor: pointer;
+      background: none;
+      border: none;
+      letter-spacing: 0.3px;
+    }
+
+    .notif-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 14px;
+      border: 1px solid var(--gray-100);
+      border-radius: 6px;
+      margin-bottom: 10px;
+      transition: border-color 0.15s, background 0.15s;
+      cursor: pointer;
+    }
+
+    .notif-item:last-child { margin-bottom: 0; }
+    .notif-item:hover { border-color: var(--accent); background: #F7F9FF; }
+
+    .notif-item.unread { border-left: 3px solid var(--accent); }
+
+    .notif-icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notif-icon svg { width: 26px; height: 26px; }
+
+    .notif-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 3px;
+    }
+
+    .notif-body {
+      font-size: 13px;
+      color: var(--gray-600);
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+
+    .notif-time {
+      font-size: 12px;
+      color: var(--gray-400);
+    }
+
+    /* ── SHIFT TIMER BAR ── */
+    .shift-bar {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-100);
+      border-radius: 8px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .shift-bar-left { color: var(--gray-600); }
+    .shift-bar-left strong { color: var(--black); }
+
+    .shift-progress-wrap {
+      flex: 1;
+      margin: 0 20px;
+      height: 6px;
+      background: var(--gray-200);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .shift-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 99px;
+      transition: width 1s linear;
+    }
+
+    .shift-bar-right { color: var(--gray-500); white-space: nowrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--gray-50);
+      border-top: 1px solid var(--gray-100);
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--gray-400);
+    }
+
+    .footer-links { display: flex; gap: 22px; }
+
+    .footer-links a {
+      color: var(--gray-400);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover { color: var(--gray-600); }
+
+    /* ── RESPONSIVE ── */
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--black);
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* Animate hamburger → X */
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      flex-direction: column;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-100);
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      padding: 0 20px;
+      display: flex;
+    }
+    .mobile-menu a {
+      font-size: 15px;
+      color: var(--gray-600);
+      text-decoration: none;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-100);
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a.active { color: var(--accent); font-weight: 600; }
+
+    .mobile-menu.open {
+      max-height: 400px;
+      padding: 12px 20px 16px;
+    }
+    .mobile-menu.open a {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Stagger each link */
+    .mobile-menu.open a:nth-child(1) { transition-delay: 0.05s; }
+    .mobile-menu.open a:nth-child(2) { transition-delay: 0.10s; }
+    .mobile-menu.open a:nth-child(3) { transition-delay: 0.15s; }
+    .mobile-menu.open a:nth-child(4) { transition-delay: 0.20s; }
+    .mobile-menu.open a:nth-child(5) { transition-delay: 0.25s; }
+    .mobile-menu.open a:nth-child(6) { transition-delay: 0.30s; }
+    .mobile-menu.open a:nth-child(7) { transition-delay: 0.35s; }
+
+    @media (max-width: 960px) {
+      .grid-top, .grid-bottom { grid-template-columns: 1fr; }
+      .page-body { padding: 24px 20px; }
+      footer { flex-direction: column; gap: 10px; text-align: center; padding: 16px 20px; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-right { gap: 10px; }
+      .nav-clock { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">Transitkey</a>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#">Trip</a></li>
+      <li><a href="#">Map</a></li>
+      <li><a href="#">Expenses</a></li>
+      <li><a href="#">Report</a></li>
+      <li><a href="#">Notification</a></li>
+      <li><a href="#">Profile</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <span class="nav-clock" id="navClock">--:-- --</span>
+      
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#" class="active">Home</a>
+    <a href="#">Trip</a>
+    <a href="#">Map</a>
+    <a href="#">Expenses</a>
+    <a href="#">Report</a>
+    <a href="#">Notification</a>
+    <a href="#">Profile</a>
+  </div>
+
+  <!-- PAGE BODY -->
+  <div class="page-body">
+
+    <!-- GREETING -->
+    <div class="greeting">
+      <h1 id="greetingText">Good Morning, Adewale</h1>
+      <p id="greetingSub">Your shift started 42 minutes ago. You have 3 trips remaining today.</p>
+    </div>
+
+    <!-- SHIFT TIMER BAR -->
+    <div class="shift-bar">
+      <div class="shift-bar-left">
+        Shift started: <strong>07:30 AM</strong> &nbsp;·&nbsp; Elapsed: <strong id="shiftElapsed">--</strong>
+      </div>
+      <div class="shift-progress-wrap">
+        <div class="shift-progress-fill" id="shiftFill" style="width:0%"></div>
+      </div>
+      <div class="shift-bar-right">Shift ends: <strong>03:30 PM</strong></div>
+    </div>
+
+    <!-- TOP ROW -->
+    <div class="grid-top">
+
+      <!-- Current Trip -->
+      <div class="card trip-card">
+        <div class="trip-header">
+          <div>
+            <p class="trip-label">Current Assigned Trip</p>
+            <h2 class="trip-route">Abeokuta - Lagos</h2>
+          </div>
+          <div class="status-badge" id="tripStatusBadge" data-status="in_progress">
+            <span class="status-dot"></span>
+            <span id="tripStatusLabel">In Progress</span>
+          </div>
+        </div>
+
+        <div class="trip-meta">
+          <div>
+            <p class="meta-label">Scheduled Time</p>
+            <p class="meta-value">08:15 AM - 09:45 AM</p>
+          </div>
+          <div>
+            <p class="meta-label">Next Stop</p>
+            <p class="meta-value">Ojota Bus Stop</p>
+          </div>
+        </div>
+
+        <button class="route-btn" onclick="handleOpenRoute()">Open Live Route</button>
+      </div>
+
+      <!-- Route & Traffic -->
+      <div class="card">
+        <p class="section-title">Route &amp; Traffic Status</p>
+
+        <div class="traffic-row">
+          <p class="row-label">Current Traffic</p>
+          <div class="row-value-lg">
+            <span id="trafficLevel">Moderate</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="traffic-row">
+          <p class="row-label">Road Condition</p>
+          <p class="row-value-sm" id="roadCondition">No hazards reported on current route.</p>
+        </div>
+
+        <div class="traffic-row">
+          <div class="row-value-inline">
+            <span>Delay Risk</span>
+            <span class="delay-low" id="delayRisk">Low</span>
+          </div>
+        </div>
+
+        <div class="traffic-row">
+          <div class="alt-route">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            Alternative Route Available
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM ROW -->
+    <div class="grid-bottom">
+
+      <!-- Daily Activity -->
+      <div class="card">
+        <p class="section-title">Daily Activity Overview</p>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <p class="stat-num" id="tripsCompleted">02</p>
+            <p class="stat-label">Trips Completed</p>
+          </div>
+          <div class="stat-box">
+            <p class="stat-num" id="hoursWorked">--</p>
+            <p class="stat-label">Hours Worked</p>
+          </div>
+          <div class="stat-box">
+            <p class="stat-num" id="passengersCarried">148</p>
+            <p class="stat-label">Passengers Carried</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="activity-row">
+            <span class="row-key">Completed Routes</span>
+            <span class="row-val">3</span>
+          </div>
+          <div class="activity-row">
+            <span class="row-key">Total Fare Received</span>
+            <span class="row-val">&#8358;84,500</span>
+          </div>
+          <div class="activity-row">
+            <span class="row-key">Current Route Status</span>
+            <span class="row-val accent">In Progress</span>
+          </div>
+          <div class="activity-row">
+            <span class="row-key">Next Break</span>
+            <span class="row-val" id="nextBreak">12:30 PM</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="card">
+        <div class="notif-header">
+          <p class="section-title">Notifications</p>
+          <button class="view-all">VIEW ALL</button>
+        </div>
+        <div id="notifsContainer"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>&#64; 2026 Transitkey. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Help Center</a>
+    </div>
+  </footer>
+
+  <script>
+    // ══════════════════════════════════════════════
+    // DRIVER DATA — replace with API fetch when ready
+    // e.g. fetch('/api/driver/dashboard').then(r => r.json()).then(data => renderDashboard(data))
+    // ══════════════════════════════════════════════
+    const DRIVER_DATA = {
+      name:             "Adewale",
+      shiftStart:       { hours: 7, minutes: 30 },
+      shiftEnd:         { hours: 15, minutes: 30 },
+      tripsRemaining:   3,
+      currentTrip: {
+        route:          "Abeokuta - Lagos",
+        scheduledTime:  "08:15 AM - 09:45 AM",
+        nextStop:       "Ojota Bus Stop",
+        status:         "in_progress", // "not_started" | "in_progress" | "ended"
+      },
+      traffic: {
+        level:          "Moderate",
+        roadCondition:  "No hazards reported on current route.",
+        delayRisk:      "Low", // "Low" | "Medium" | "High"
+      },
+      activity: {
+        tripsCompleted:     2,
+        passengersCarried:  148,
+        completedRoutes:    3,
+        totalFare:          "₦84,500",
+        nextBreak:          "12:30 PM",
+        routeStatus:        "In Progress",
+      },
+      notifications: [
+        {
+          id: 1,
+          title: "Traffic Alert",
+          body: "Heavy traffic at 3rd Mainland Bridge. Use Carter Bridge instead.",
+          minsAgo: 2,
+          unread: true,
+          icon: "warning",
+        },
+        {
+          id: 2,
+          title: "Route Schedule Updated",
+          body: "Tomorrow's Imo to Enugu timing has been adjusted.",
+          minsAgo: 60,
+          unread: true,
+          icon: "calendar",
+        },
+      ],
+    };
+
+    // ── RENDER DASHBOARD FROM DATA ──
+    function renderDashboard(d) {
+      // Greeting
+      const h = new Date().getHours();
+      const greet = h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
+      document.getElementById('greetingText').textContent = `${greet}, ${d.name}`;
+
+      // Current trip
+      document.querySelector('.trip-route').textContent = d.currentTrip.route;
+      document.querySelectorAll('.meta-value')[0].textContent = d.currentTrip.scheduledTime;
+      document.querySelectorAll('.meta-value')[1].textContent = d.currentTrip.nextStop;
+      setTripStatus(d.currentTrip.status);
+
+      // Traffic
+      document.getElementById('trafficLevel').textContent  = d.traffic.level;
+      document.getElementById('roadCondition').textContent = d.traffic.roadCondition;
+      const delayEl = document.getElementById('delayRisk');
+      delayEl.textContent = d.traffic.delayRisk;
+      delayEl.className = d.traffic.delayRisk === 'Low' ? 'delay-low' : d.traffic.delayRisk === 'Medium' ? 'delay-med' : 'delay-high';
+
+      // Activity stats
+      document.getElementById('tripsCompleted').textContent    = String(d.activity.tripsCompleted).padStart(2,'0');
+      document.getElementById('passengersCarried').textContent = d.activity.passengersCarried;
+      document.querySelectorAll('.row-val')[0].textContent     = d.activity.completedRoutes;
+      document.querySelectorAll('.row-val')[1].textContent     = d.activity.totalFare;
+      const statusVal = document.querySelectorAll('.row-val')[2];
+      statusVal.textContent = d.activity.routeStatus;
+      statusVal.className   = 'row-val' + (d.activity.routeStatus === 'In Progress' ? ' accent' : '');
+      document.getElementById('nextBreak').textContent         = d.activity.nextBreak;
+
+      // Notifications
+      renderNotifications(d.notifications);
+    }
+
+    function renderNotifications(notifs) {
+      const container = document.getElementById('notifsContainer');
+      container.innerHTML = '';
+      const icons = {
+        warning: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+        calendar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+      };
+      notifs.forEach(n => {
+        const div = document.createElement('div');
+        div.className = 'notif-item' + (n.unread ? ' unread' : '');
+        div.onclick = () => { div.classList.remove('unread'); n.unread = false; };
+        div.innerHTML = `
+          <div class="notif-icon">${icons[n.icon] || icons.warning}</div>
+          <div class="notif-content">
+            <p class="notif-title">${n.title}</p>
+            <p class="notif-body">${n.body}</p>
+            <p class="notif-time" data-mins="${n.minsAgo}">${formatTime(n.minsAgo)}</p>
+          </div>`;
+        container.appendChild(div);
+      });
+    }
+
+    function formatTime(mins) {
+      if (mins < 60) return `${mins} min${mins !== 1 ? 's' : ''} ago`;
+      const h = Math.floor(mins / 60);
+      return `${h} hour${h !== 1 ? 's' : ''} ago`;
+    }
+
+    // ── LIVE CLOCK ──
+    function updateClock() {
+      const now = new Date();
+      const h = now.getHours();
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      const h12 = h % 12 || 12;
+      document.getElementById('navClock').textContent = `${h12}:${m}:${s} ${ampm}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // ── GREETING based on time of day ──
+    function updateGreeting() {
+      const h = new Date().getHours();
+      const greet = h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
+      document.getElementById('greetingText').textContent = `${greet}, Adewale`;
+    }
+    updateGreeting();
+
+    // ── SHIFT ELAPSED TIMER ──
+    // Shift start: 07:30 AM, duration: 8 hours
+    function updateShift() {
+      const now = new Date();
+      const shiftStart = new Date(now);
+      shiftStart.setHours(7, 30, 0, 0);
+      const shiftEnd = new Date(now);
+      shiftEnd.setHours(15, 30, 0, 0);
+
+      const totalMs = shiftEnd - shiftStart;      // 8 hrs in ms
+      const elapsedMs = Math.max(0, now - shiftStart);
+      const pct = Math.min(100, (elapsedMs / totalMs) * 100);
+
+      const elapsedMins = Math.floor(elapsedMs / 60000);
+      const hrs = Math.floor(elapsedMins / 60);
+      const mins = elapsedMins % 60;
+
+      document.getElementById('shiftFill').style.width = pct.toFixed(1) + '%';
+      document.getElementById('shiftElapsed').textContent =
+        hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
+
+      // Live hours worked in stat box
+      const hoursWorked = (elapsedMs / 3600000).toFixed(1);
+      document.getElementById('hoursWorked').textContent = hoursWorked;
+
+      // Update greeting subtitle
+      document.getElementById('greetingSub').textContent =
+        `Your shift started ${elapsedMins} minute${elapsedMins !== 1 ? 's' : ''} ago. You have 3 trips remaining today.`;
+    }
+    setInterval(updateShift, 60000);
+    updateShift();
+
+    // ── NOTIFICATION TIMESTAMPS tick up ──
+    function updateNotifTimes() {
+      document.querySelectorAll('.notif-time[data-mins]').forEach(el => {
+        let mins = parseInt(el.dataset.mins) + 1;
+        el.dataset.mins = mins;
+        if (mins < 60) {
+          el.textContent = `${mins} min${mins !== 1 ? 's' : ''} ago`;
+        } else {
+          const h = Math.floor(mins / 60);
+          el.textContent = `${h} hour${h !== 1 ? 's' : ''} ago`;
+        }
+      });
+    }
+    setInterval(updateNotifTimes, 60000);
+
+    // ── OPEN LIVE ROUTE button ──
+    function handleOpenRoute() {
+      const btn = document.querySelector('.route-btn');
+      btn.textContent = 'Loading Map...';
+      btn.style.background = 'var(--primary)';
+      setTimeout(() => {
+        btn.textContent = 'Open Live Route';
+        btn.style.background = '';
+      }, 2000);
+    }
+
+    /**
+     * setTripStatus(status)
+     * Called by the backend integration to update the trip badge.
+     * @param {'in_progress'|'not_started'|'ended'} status
+     */
+    function setTripStatus(status) {
+      const badge = document.getElementById('tripStatusBadge');
+      const label = document.getElementById('tripStatusLabel');
+      const labels = {
+        in_progress: 'In Progress',
+        not_started: 'Not Started',
+        ended: 'Ended'
+      };
+      badge.dataset.status = status;
+      label.textContent = labels[status] || 'Unknown';
+    }
+
+    // ── AUTO-DERIVE STATUS from shift time (frontend fallback) ──
+    function autoStatus() {
+      const now = new Date();
+      const shiftStart = new Date(now); shiftStart.setHours(7, 30, 0, 0);
+      const tripStart  = new Date(now); tripStart.setHours(8, 15, 0, 0);
+      const tripEnd    = new Date(now); tripEnd.setHours(9, 45, 0, 0);
+
+      if (now < tripStart) {
+        setTripStatus('not_started');
+      } else if (now >= tripStart && now <= tripEnd) {
+        setTripStatus('in_progress');
+      } else {
+        setTripStatus('ended');
+      }
+    }
+    autoStatus();
+
+    // ── MOBILE MENU TOGGLE ──
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const btn = document.getElementById('hamburger');
+      menu.classList.toggle('open');
+      btn.classList.toggle('open');
+      btn.setAttribute('aria-expanded', menu.classList.contains('open'));
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transitkey – Report</title>
+  <style>
+    :root {
+      --primary:       #2E3A8C;
+      --primary-dark1: #1B2562;
+      --accent:        #3B6FE8;
+      --accent-light:  #C8D4F8;
+      --black:         #141414;
+      --gray-700:      #3D3D3D;
+      --gray-600:      #5C5C5C;
+      --gray-500:      #6E6E6E;
+      --gray-400:      #8F8F8F;
+      --gray-300:      #B8B8B8;
+      --gray-200:      #D4D4D4;
+      --gray-100:      #E8E8E8;
+      --gray-50:       #F5F5F5;
+      --white:         #FFFFFF;
+      --success:       #00B37A;
+      --warning:       #F5A623;
+      --error:         #EF4B5E;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: var(--black);
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-100);
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+
+    .nav-logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--gray-600);
+      text-decoration: none;
+      padding-bottom: 3px;
+      transition: color 0.15s;
+    }
+
+    .nav-links a.active {
+      color: var(--black);
+      font-weight: 600;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .nav-links a:hover { color: var(--black); }
+
+    .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .nav-clock { font-size: 13px; font-weight: 600; color: var(--gray-600); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--black);
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-100);
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      padding: 0 20px;
+      position: relative;
+      z-index: 199;
+    }
+
+    .mobile-menu a {
+      font-size: 15px;
+      color: var(--gray-600);
+      text-decoration: none;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-100);
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a.active { color: var(--accent); font-weight: 600; }
+    .mobile-menu.open { max-height: 400px; padding: 12px 20px 16px; }
+    .mobile-menu.open a { opacity: 1; transform: translateY(0); }
+    .mobile-menu.open a:nth-child(1) { transition-delay: 0.05s; }
+    .mobile-menu.open a:nth-child(2) { transition-delay: 0.10s; }
+    .mobile-menu.open a:nth-child(3) { transition-delay: 0.15s; }
+    .mobile-menu.open a:nth-child(4) { transition-delay: 0.20s; }
+    .mobile-menu.open a:nth-child(5) { transition-delay: 0.25s; }
+    .mobile-menu.open a:nth-child(6) { transition-delay: 0.30s; }
+    .mobile-menu.open a:nth-child(7) { transition-delay: 0.35s; }
+
+    /* ── LAYOUT ── */
+    .layout {
+      flex: 1;
+      display: flex;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 260px;
+      background: var(--gray-50);
+      border-right: 1px solid var(--gray-100);
+      padding: 24px 20px;
+      flex-shrink: 0;
+    }
+
+    .driver-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .driver-card svg { color: var(--black); flex-shrink: 0; }
+
+    .driver-card .d-id { font-size: 15px; font-weight: 700; color: var(--black); }
+    .driver-card .d-status { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+
+    .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 14px;
+      border-radius: 6px;
+      font-size: 15px;
+      color: var(--gray-700);
+      text-decoration: none;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.15s, color 0.15s;
+      min-height: 44px;
+    }
+
+    .sidebar-link svg { flex-shrink: 0; }
+
+    .sidebar-link:hover { background: var(--gray-100); }
+
+    .sidebar-link.active {
+      background: var(--gray-200);
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    .sidebar-link.active::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 3px;
+      background: var(--black);
+      border-radius: 2px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main-content {
+      flex: 1;
+      padding: 40px 48px;
+      max-width: 900px;
+    }
+
+    .main-content h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .main-content .subtitle {
+      font-size: 15px;
+      color: var(--gray-600);
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 680px;
+    }
+
+    /* ── FORM ── */
+    .field { margin-bottom: 26px; }
+
+    .field label {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 10px;
+    }
+
+    .select-wrap { position: relative; }
+
+    .select-wrap select {
+      width: 100%;
+      height: 52px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: 6px;
+      padding: 0 40px 0 16px;
+      font-size: 15px;
+      color: var(--gray-500);
+      background: var(--white);
+      outline: none;
+      appearance: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+
+    .select-wrap select.filled { color: var(--black); }
+    .select-wrap select:focus { border-color: var(--accent); }
+
+    .select-wrap svg {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--gray-400);
+    }
+
+    textarea {
+      width: 100%;
+      height: 260px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: 6px;
+      padding: 16px;
+      font-size: 15px;
+      color: var(--black);
+      background: var(--white);
+      outline: none;
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.6;
+      transition: border-color 0.15s;
+    }
+
+    textarea::placeholder { color: var(--gray-400); }
+    textarea:focus { border-color: var(--accent); }
+
+    /* ── URGENCY ── */
+    .urgency-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .urgency-btn {
+      height: 56px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: 6px;
+      background: var(--white);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--gray-700);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .urgency-btn:hover { border-color: var(--gray-500); }
+
+    .urgency-btn[data-level="critical"] { color: var(--error); }
+
+    .urgency-btn.selected {
+      background: var(--gray-100);
+      border-color: var(--black);
+      border-width: 2px;
+    }
+
+    .urgency-btn.selected[data-level="critical"] {
+      border-color: var(--error);
+      background: #FEF0F1;
+    }
+
+    .divider { border-top: 1px solid var(--gray-200); margin-bottom: 26px; }
+
+    /* ── BUTTONS ── */
+    .btn-row { display: flex; gap: 14px; }
+
+    .btn-submit {
+      flex: 1;
+      max-width: 280px;
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      height: 56px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn-submit:hover { background: var(--primary); }
+    .btn-submit:active { transform: scale(0.99); }
+
+    .btn-cancel {
+      flex: 1;
+      max-width: 200px;
+      background: var(--white);
+      color: var(--gray-600);
+      border: 1.5px solid var(--gray-300);
+      border-radius: 6px;
+      height: 56px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .btn-cancel:hover { border-color: var(--gray-500); color: var(--black); }
+
+    .form-error {
+      display: none;
+      color: var(--error);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .form-error.visible { display: block; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--black);
+      color: var(--white);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 999;
+    }
+
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--gray-50);
+      border-top: 1px solid var(--gray-100);
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--gray-400);
+    }
+
+    .footer-links { display: flex; gap: 22px; }
+    .footer-links a { color: var(--gray-400); text-decoration: none; }
+    .footer-links a:hover { color: var(--gray-600); }
+
+    /* ── RESPONSIVE ── */
+
+    /* Tablet: sidebar moves above content but stays as a column list */
+    @media (max-width: 900px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--gray-100); }
+      .main-content { padding: 28px 24px; max-width: 100%; }
+      .urgency-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Mobile: sidebar becomes a horizontal scrollable tab bar, touch targets grow, type tightens */
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      /* Sidebar → horizontal scrolling tab strip */
+      .sidebar {
+        padding: 14px 16px;
+        position: sticky;
+        top: 60px;
+        z-index: 90;
+        background: var(--white);
+      }
+
+      .driver-card {
+        margin-bottom: 14px;
+        padding: 12px 14px;
+      }
+
+      .driver-card .d-id { font-size: 14px; }
+      .driver-card .d-status { font-size: 12px; }
+
+      .sidebar-nav {
+        flex-direction: row;
+        gap: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 2px;
+      }
+
+      .sidebar-nav::-webkit-scrollbar { display: none; }
+
+      .sidebar-link {
+        flex-direction: column;
+        gap: 6px;
+        flex-shrink: 0;
+        min-width: 84px;
+        padding: 10px 12px;
+        font-size: 12px;
+        text-align: center;
+        border: 1px solid var(--gray-200);
+        background: var(--white);
+      }
+
+      .sidebar-link.active::after {
+        /* underline indicator instead of right-edge bar in horizontal mode */
+        right: auto;
+        left: 8px;
+        right: 8px;
+        top: auto;
+        bottom: 0;
+        height: 3px;
+        width: auto;
+      }
+
+      /* Main content spacing */
+      .main-content { padding: 24px 16px 40px; }
+
+      .main-content h1 { font-size: 22px; line-height: 1.3; }
+      .main-content .subtitle { font-size: 14px; margin-bottom: 24px; }
+
+      .field { margin-bottom: 22px; }
+      .field label { font-size: 14px; }
+
+      /* Bigger touch targets for inputs */
+      .select-wrap select {
+        height: 50px;
+        font-size: 16px; /* prevents iOS auto-zoom on focus */
+      }
+
+      textarea {
+        height: 180px;
+        font-size: 16px; /* prevents iOS auto-zoom on focus */
+      }
+
+      /* Urgency buttons: 2x2 grid with larger tap targets */
+      .urgency-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .urgency-btn {
+        height: 52px;
+        font-size: 14px;
+      }
+
+      /* Stack action buttons full-width, submit first */
+      .btn-row { flex-direction: column-reverse; gap: 12px; }
+      .btn-submit, .btn-cancel {
+        max-width: 100%;
+        height: 52px;
+        font-size: 16px;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding: 16px 16px;
+        font-size: 11px;
+      }
+
+      .footer-links { gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+      .toast {
+        left: 16px;
+        right: 16px;
+        transform: translateY(20px);
+        text-align: center;
+        white-space: normal;
+      }
+
+      .toast.show { transform: translateY(0); }
+    }
+
+    /* Small phones */
+    @media (max-width: 380px) {
+      .sidebar-link { min-width: 72px; font-size: 11px; }
+      .urgency-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .urgency-btn { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">Transitkey</a>
+    <ul class="nav-links">
+      <li><a href="transitkey_dashboard.html">Home</a></li>
+      <li><a href="transitkey_trip.html">Trip</a></li>
+      <li><a href="transitkey_map.html">Map</a></li>
+      <li><a href="transitkey_expenses_simple.html">Expenses</a></li>
+      <li><a href="#" class="active">Report</a></li>
+      <li><a href="transitkey_notifications.html">Notification</a></li>
+      <li><a href="transitkey_profile.html">Profile</a></li>
+    </ul>
+    <div class="nav-right">
+      <span class="nav-clock" id="navClock"></span>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="transitkey_dashboard.html">Home</a>
+    <a href="transitkey_trip.html">Trip</a>
+    <a href="transitkey_map.html">Map</a>
+    <a href="transitkey_expenses_simple.html">Expenses</a>
+    <a href="#" class="active">Report</a>
+    <a href="transitkey_notifications.html">Notification</a>
+    <a href="transitkey_profile.html">Profile</a>
+  </div>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="driver-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="12" cy="9" r="3"/>
+          <path d="M6.5 19a6 6 0 0111 0"/>
+        </svg>
+        <div>
+          <p class="d-id" id="sidebarDriverId">Driver ID: 8821</p>
+          <p class="d-status" id="sidebarStatus">Status: Active</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="#">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="1" y="3" width="15" height="13" rx="2"/>
+            <path d="M16 8h4l3 3v5h-7V8z"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          Bus Information
+        </a>
+        <a class="sidebar-link" href="transitkey_trip.html">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/>
+            <line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>
+          </svg>
+          My Routes
+        </a>
+        <a class="sidebar-link active" href="#">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          Submit Complaint
+        </a>
+        <a class="sidebar-link" href="#">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 106 5.3L3 8"/><path d="M12 7v5l4 2"/>
+          </svg>
+          Case History
+        </a>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <h1>Submit a Complaint / Feedback</h1>
+      <p class="subtitle">
+        Report issues regarding vehicles, routes, or passenger incidents. Technical support will review your submission within 24 hours.
+      </p>
+
+      <p class="form-error" id="formError"></p>
+
+      <div class="field">
+        <label for="category">Complaint Category</label>
+        <div class="select-wrap">
+          <select id="category" onchange="this.classList.toggle('filled', this.value !== '')">
+            <option value="">Select a category...</option>
+            <option>Vehicle Issue</option>
+            <option>Route Problem</option>
+            <option>Passenger Incident</option>
+            <option>Payment / Fare Issue</option>
+            <option>Other</option>
+          </select>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="description">Detailed Description</label>
+        <textarea id="description" placeholder="Describe the incident or feedback in detail..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Urgency Level</label>
+        <div class="urgency-grid" id="urgencyGrid">
+          <button class="urgency-btn selected" data-level="low" onclick="selectUrgency(this)">Low</button>
+          <button class="urgency-btn" data-level="medium" onclick="selectUrgency(this)">Medium</button>
+          <button class="urgency-btn" data-level="high" onclick="selectUrgency(this)">High</button>
+          <button class="urgency-btn" data-level="critical" onclick="selectUrgency(this)">Critical</button>
+        </div>
+        <div class="divider"></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-submit" onclick="submitComplaint()">Submit Complaint</button>
+        <button class="btn-cancel" onclick="cancelComplaint()">Cancel</button>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>&#64; 2026 Transitkey. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Help Center</a>
+    </div>
+  </footer>
+
+  <script>
+    // ══════════════════════════════════════════════
+    // REPORT DATA — replace with API fetch when ready
+    // e.g. fetch('/api/driver/profile-summary').then(r => r.json()).then(data => renderSidebar(data))
+    // ══════════════════════════════════════════════
+    const SIDEBAR_DATA = {
+      driverId: "8821",
+      status: "Active",
+    };
+
+    function renderSidebar(d) {
+      document.getElementById('sidebarDriverId').textContent = `Driver ID: ${d.driverId}`;
+      document.getElementById('sidebarStatus').textContent   = `Status: ${d.status}`;
+    }
+
+    let selectedUrgency = 'low';
+
+    function selectUrgency(btn) {
+      document.querySelectorAll('.urgency-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedUrgency = btn.dataset.level;
+    }
+
+    function submitComplaint() {
+      const category    = document.getElementById('category').value;
+      const description = document.getElementById('description').value.trim();
+
+      if (!category)    { showError('Please select a complaint category.'); return; }
+      if (!description) { showError('Please describe the issue.');          return; }
+
+      clearError();
+
+      const btn = document.querySelector('.btn-submit');
+      btn.textContent = 'Submitting...';
+      btn.disabled = true;
+
+      // TODO: replace with -> fetch('/api/driver/complaints', { method: 'POST', body: JSON.stringify({ category, description, urgency: selectedUrgency }) })
+      setTimeout(() => {
+        btn.textContent = 'Submit Complaint';
+        btn.disabled = false;
+        showToast('✓ Complaint submitted successfully');
+        resetForm();
+      }, 1200);
+    }
+
+    function cancelComplaint() {
+      if (confirm('Discard this complaint?')) {
+        resetForm();
+      }
+    }
+
+    function resetForm() {
+      document.getElementById('category').value = '';
+      document.getElementById('category').classList.remove('filled');
+      document.getElementById('description').value = '';
+      document.querySelectorAll('.urgency-btn').forEach(b => b.classList.remove('selected'));
+      document.querySelector('.urgency-btn[data-level="low"]').classList.add('selected');
+      selectedUrgency = 'low';
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('formError');
+      el.textContent = msg;
+      el.classList.add('visible');
+    }
+
+    function clearError() {
+      const el = document.getElementById('formError');
+      el.textContent = '';
+      el.classList.remove('visible');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ── LIVE CLOCK ──
+    function updateClock() {
+      const now = new Date();
+      const h = now.getHours() % 12 || 12;
+      const m = String(now.getMinutes()).padStart(2,'0');
+      const s = String(now.getSeconds()).padStart(2,'0');
+      const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+      document.getElementById('navClock').textContent = `${h}:${m}:${s} ${ampm}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ── MOBILE MENU ──
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const btn  = document.getElementById('hamburger');
+      menu.classList.toggle('open');
+      btn.classList.toggle('open');
+    }
+
+    // ── INIT ──
+    renderSidebar(SIDEBAR_DATA);
+  </script>
+
+</body>
+</html>

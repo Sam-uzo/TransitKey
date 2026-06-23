@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TransitKey - Map</title>
+  </head>
+  <body class="min-h-screen w-full flex flex-col justify-between items-center">
+
+  
+    <header class="flex w-full justify-between items-center p-4 px-16 border-b-2 border-gray-300">
+      <div><h2 class="font-bold text-[#2563EB] text-xl">TransitKey</h2></div>
+      <nav class="flex justify-center items-center w-1/2 text-1xl text-gray-700 font-medium gap-4">
+        <span><a href="./passenger-home.html" class="hover:underline">Home</a></span>
+        <span><a href="./Passenger-route.html" class="hover:underline">Route</a></span>
+        <span><a href="./passenger-details.html" class="hover:underline">Details</a></span>
+        <span><a href="./passenger-map.html" class="underline text-[#2563EB] font-semibold">Map</a></span>
+        <span><a href="./passenger-report.html" class="hover:underline">Report</a></span>
+        <span><a href="./passenger-notification.html" class="hover:underline">Notification</a></span>
+        <span><a href="./passenger-profile.html" class="hover:underline">Profile</a></span>
+      </nav>
+      <div>
+        <button class="SignUp-btn bg-[#2563EB] text-white p-2 px-4">Sign-up / Login</button>
+      </div>
+    </header>
+
+   
+    <main class="flex flex-1 w-full relative">
+
+     
+      <section class="flex-1 relative bg-gray-100 flex flex-col">
+
+        
+        <div class="absolute top-4 left-4 flex flex-col gap-2 z-10">
+          <div class="flex items-center gap-2 bg-white border-2 border-gray-300 px-4 py-2 font-semibold text-sm">
+            <span class="w-3 h-3 rounded-full bg-red-500 animate-pulse inline-block"></span>
+            <span>LIVE STATUS: EN ROUTE</span>
+          </div>
+          <div class="bg-white border-2 border-gray-300 px-4 py-2 font-semibold text-sm">
+            Next Stop: <span class="font-bold">CMS Terminal</span>
+          </div>
+        </div>
+
+      
+        <div class="absolute bottom-6 left-4 flex flex-col gap-1 z-10">
+          <button class="w-10 h-10 border-2 border-gray-400 bg-white flex items-center justify-center font-bold text-lg hover:bg-gray-100">+</button>
+          <button class="w-10 h-10 border-2 border-gray-400 bg-white flex items-center justify-center font-bold text-lg hover:bg-gray-100">−</button>
+          <button class="w-10 h-10 border-2 border-gray-400 bg-white flex items-center justify-center hover:bg-gray-100">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+            </svg>
+          </button>
+        </div>
+
+       
+        <div class="flex-1 flex items-center justify-center">
+          <div class="flex flex-col items-center gap-2 opacity-40">
+           
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-64 h-64" fill="none" viewBox="0 0 100 80" stroke="#333" stroke-width="2">
+              <path d="M10 70 L10 10 L35 20 L65 10 L90 20 L90 70 L65 60 L35 70 L10 70Z" stroke-linejoin="round"/>
+              <path d="M35 20 L35 70"/>
+              <path d="M65 10 L65 60"/>
+              
+              <path d="M20 60 Q30 45 40 50 Q55 55 65 40 Q75 30 80 35" stroke-dasharray="4,3" stroke-width="2.5"/>
+              
+              <circle cx="65" cy="32" r="6" fill="#333" stroke="none"/>
+              <path d="M65 38 L65 45" stroke="#333" stroke-width="2"/>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+
+      <aside class="w-72 border-l-2 border-gray-300 flex flex-col">
+
+  
+        <div class="p-4 border-b-2 border-gray-300">
+          <p class="text-xs text-gray-500 font-semibold mb-1">ESTIMATED ARRIVAL</p>
+          <p class="text-2xl font-bold">12 mins</p>
+          <p class="text-sm text-gray-600">Arriving at Ibadan Terminal at 10:05</p>
+        </div>
+
+       
+        <div class="p-4 border-b-2 border-gray-300">
+          <p class="text-xs text-gray-500 font-semibold mb-2">ASSIGNED DRIVER</p>
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 border-2 border-gray-400 flex items-center justify-center bg-gray-100">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0"/>
+              </svg>
+            </div>
+            <div>
+              <p class="font-semibold">Adewale Musa</p>
+              <p class="text-sm text-gray-500">⭐ 4.9 &nbsp; 2,400+ trips</p>
+            </div>
+          </div>
+        </div>
+
+        
+        <div class="p-4 border-b-2 border-gray-300">
+          <p class="text-xs text-gray-500 font-semibold mb-3">BUS INFORMATION</p>
+          <div class="flex justify-between">
+            <div>
+              <p class="text-xs text-gray-500">Plate Number</p>
+              <p class="font-bold">LND472YK</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500">Model</p>
+              <p class="font-bold">LAMMATA BRT Bus</p>
+            </div>
+          </div>
+        </div>
+
+    
+        <div class="p-4 border-b-2 border-gray-300 flex-1">
+          <p class="text-xs text-gray-500 font-semibold mb-3">ROUTE LOGS</p>
+          <div class="flex flex-col gap-3">
+
+            <div class="flex gap-3 items-start">
+              <div class="mt-1 flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-semibold">09:15</p>
+                <p class="text-sm text-gray-600">Departed Jibowu Bus Terminal</p>
+              </div>
+            </div>
+
+            <div class="flex gap-3 items-start">
+              <div class="mt-1 flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-semibold">09:40</p>
+                <p class="text-sm text-gray-600">Passed Mowe Stop</p>
+              </div>
+            </div>
+
+            <div class="flex gap-3 items-start">
+              <div class="mt-1 flex-shrink-0">
+                <!-- active pulsing circle -->
+                <div class="w-5 h-5 rounded-full border-4 border-[#2563EB] flex items-center justify-center">
+                  <div class="w-2 h-2 rounded-full bg-[#2563EB]"></div>
+                </div>
+              </div>
+              <div>
+                <p class="text-sm font-semibold">10:05</p>
+                <p class="text-sm text-gray-600">Approaching Ibadan Terminal</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      
+        <div class="p-4 flex flex-col gap-3">
+          <button class="w-full bg-[#93C5FD] text-black font-semibold py-3 hover:bg-[#2563EB] hover:text-white transition-colors text-sm">
+            REPORT AN ISSUE
+          </button>
+          <button class="w-full border-2 border-black font-semibold py-3 hover:bg-gray-100 transition-colors text-sm">
+            EMERGENCY REPORT
+          </button>
+        </div>
+
+      </aside>
+    </main>
+
+   
+    <footer class="bg-[#C2C2C2] border-t-4 flex justify-end items-center w-full gap-16 px-16 py-1 border-gray-300 text-[#4B5563] text-sm font-normal">
+      <div><p>@ 2026 TransitKey. All rights reserved</p></div>
+      <div class="flex gap-4">
+        <span><a href="#">Privacy Policy</a></span>
+        <span><a href="#">Terms of Service</a></span>
+        <span><a href="#">Help Center</a></span>
+      </div>
+    </footer>
+
+      <script type="module" src="./map.js"></script>
+  </body>
+</html>

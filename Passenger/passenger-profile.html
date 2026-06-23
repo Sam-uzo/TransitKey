@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TransitKey - Profile</title>
+  </head>
+  <body class="min-h-screen w-full flex flex-col justify-between items-center">
+
+    <!-- HEADER -->
+    <header class="flex w-full justify-between items-center p-4 px-16 border-b-2 border-gray-300">
+      <div><h2 class="font-bold text-[#2563EB] text-xl">TransitKey</h2></div>
+      <nav class="flex justify-center items-center w-1/2 text-1xl text-gray-700 font-medium gap-4">
+        <span><a href="./passenger-home.html" class="hover:underline">Home</a></span>
+        <span><a href="./Passenger-route.html" class="hover:underline">Route</a></span>
+        <span><a href="./passenger-details.html" class="hover:underline">Details</a></span>
+        <span><a href="./passenger-map.html" class="hover:underline">Map</a></span>
+        <span><a href="./passenger-report.html" class="hover:underline">Report</a></span>
+        <span><a href="./passenger-notification.html" class="hover:underline">Notification</a></span>
+        <span><a href="./passenger-profile.html" class="underline text-[#2563EB] font-semibold">Profile</a></span>
+      </nav>
+      <div>
+        <button class="hidden bg-[#2563EB] text-white p-2 px-4">Sign-up / Login</button>
+        <img class="w-20 hidden  object-cover" src="https://res.cloudinary.com/dk10vcfuz/image/upload/v1781707509/Transit_Key_logo_qf50jj.png" alt="The image of a bus">
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="flex-1 w-full px-16 py-6 flex flex-col gap-6">
+
+      <!-- Page Title -->
+      <div>
+        <h1 class="text-2xl font-bold">Passenger Profile</h1>
+        <p class="text-gray-500 text-sm">Manage your identity, travel preferences, and history.</p>
+      </div>
+
+      <!-- Top Row: User Info + Saved Routes -->
+      <div class="flex gap-6">
+
+        <!-- User Info Card -->
+        <div class="border-2 border-gray-300 p-6 w-2/5 flex flex-col gap-4">
+          <div class="flex justify-between items-center">
+            <h2 class="text-lg font-bold">User Info</h2>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0"/>
+            </svg>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-semibold">Full Name</label>
+            <input type="text" placeholder="Isaiah Adebayo" class="border border-gray-300 p-2 text-sm text-gray-400 w-full" />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-semibold">Phone Number</label>
+            <input type="text" placeholder="+234 08095674832" class="border border-gray-300 p-2 text-sm text-gray-400 w-full" />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-semibold">Email Address</label>
+            <input type="email" placeholder="name@gmail.com" class="border border-gray-300 p-2 text-sm text-gray-400 w-full" />
+          </div>
+
+          <button class="bg-[#93C5FD] text-black font-semibold py-3 w-full text-sm hover:bg-[#2563EB] hover:text-white transition-colors">
+            EDIT INFORMATION
+          </button>
+        </div>
+
+        <!-- Saved Routes Card -->
+        <div class="border-2 border-gray-300 p-6 flex-1 flex flex-col gap-4">
+          <div class="flex justify-between items-center">
+            <h2 class="text-lg font-bold">Saved Routes</h2>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503-10.498l4.875 2.438M9 3l-4.875 2.438-4.875-2.438M9 3L4.125 5.438M9 3l4.875 2.438M14.625 5.438L9 8.25M4.125 5.438L9 8.25"/>
+            </svg>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+
+            <!-- Route 1 -->
+            <div class="border border-gray-300 p-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
+              </svg>
+              <div>
+                <p class="text-sm font-semibold">Home to Church</p>
+                <p class="text-xs text-gray-500">42 Joy Avenue to Opique</p>
+              </div>
+            </div>
+
+            <!-- Route 2 -->
+            <div class="border border-gray-300 p-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0"/>
+              </svg>
+              <div>
+                <p class="text-sm font-semibold">Morning Commute</p>
+                <p class="text-xs text-gray-500">42 Joy Avenue to Zone 3</p>
+              </div>
+            </div>
+
+            <!-- Route 3 -->
+            <div class="border border-gray-300 p-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/>
+              </svg>
+              <div>
+                <p class="text-sm font-semibold">Gym Route</p>
+                <p class="text-xs text-gray-500">42 Joy Avenue to 360 Fit</p>
+              </div>
+            </div>
+
+            <!-- Add New Route -->
+            <div class="border border-dashed border-gray-300 p-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50 text-gray-400">
+              <span class="text-xl font-light">+</span>
+              <p class="text-sm font-semibold">ADD NEW ROUTE</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Recent Trip History -->
+      <div class="border-2 border-gray-300 p-6 flex flex-col gap-4">
+        <h2 class="text-lg font-bold">Recent Trip History</h2>
+
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-gray-500 font-semibold border-b border-gray-200">
+              <th class="pb-2">DATE</th>
+              <th class="pb-2">ROUTE ID</th>
+              <th class="pb-2">DESTINATION</th>
+              <th class="pb-2">STATUS</th>
+              <th class="pb-2 text-right">FARE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-100">
+              <td class="py-3">April 24, 2026</td>
+              <td class="py-3">#TRP-8821</td>
+              <td class="py-3">Abuja</td>
+              <td class="py-3">
+                <span class="border border-black px-3 py-1 text-xs font-semibold">COMPLETED</span>
+              </td>
+              <td class="py-3 text-right font-semibold">₦1,500</td>
+            </tr>
+            <tr class="border-b border-gray-100">
+              <td class="py-3">April 30, 2026</td>
+              <td class="py-3">#TRP-8701</td>
+              <td class="py-3">Lagos</td>
+              <td class="py-3">
+                <span class="border border-black px-3 py-1 text-xs font-semibold">COMPLETED</span>
+              </td>
+              <td class="py-3 text-right font-semibold">₦1,500</td>
+            </tr>
+            <tr>
+              <td class="py-3">June 15, 2026</td>
+              <td class="py-3">#TRP-8691</td>
+              <td class="py-3">Ibadan</td>
+              <td class="py-3">
+                <span class="border border-red-500 text-red-500 px-3 py-1 text-xs font-semibold">CANCELLED</span>
+              </td>
+              <td class="py-3 text-right font-semibold">₦1,500</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Bottom Row: Account Settings + Support/Logout -->
+      <div class="flex gap-6">
+
+        <!-- Account Settings -->
+        <div class="border-2 border-gray-300 p-6 flex-1 flex flex-col gap-5">
+          <h2 class="text-lg font-bold">Account Settings</h2>
+
+          <!-- Push Notifications -->
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="font-semibold text-sm">Push Notifications</p>
+              <p class="text-xs text-gray-500">Receive real-time trip alerts</p>
+            </div>
+            <!-- Toggle Switch -->
+            <div id="toggle-notif" class="w-12 h-6 bg-[#2563EB] rounded-full cursor-pointer flex items-center px-1 transition-colors duration-300">
+              <div class="w-4 h-4 bg-white rounded-full ml-auto transition-all duration-300"></div>
+            </div>
+          </div>
+
+          <!-- Two-Factor Auth -->
+          <div class="flex justify-between items-center border-t border-gray-100 pt-4">
+            <div>
+              <p class="font-semibold text-sm">Two-Factor Authentication</p>
+              <p class="text-xs text-gray-500">Enhance your account security</p>
+            </div>
+            <a href="#" class="text-sm font-bold underline">Enable</a>
+          </div>
+
+          <!-- Default Payment -->
+          <div class="flex justify-between items-center border-t border-gray-100 pt-4">
+            <div>
+              <p class="font-semibold text-sm">Default Payment Method</p>
+              <p class="text-xs text-gray-500">Mastercard ending in 4242</p>
+            </div>
+            <a href="#" class="text-sm font-bold underline">Manage</a>
+          </div>
+        </div>
+
+        <!-- Support + Logout -->
+        <div class="flex flex-col gap-3 w-1/3">
+          <button class="border-2 border-gray-300 flex justify-between items-center p-4 w-full hover:bg-gray-50">
+            <span class="font-semibold text-sm">Contact Support</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"/>
+            </svg>
+          </button>
+          <button class="bg-[#2563EB] text-white flex justify-between items-center p-4 w-full hover:bg-blue-700 transition-colors">
+            <span class="font-semibold text-sm">LOG OUT</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#C2C2C2] border-t-4 flex justify-end items-center w-full gap-16 px-16 py-1 border-gray-300 text-[#4B5563] text-sm font-normal">
+      <div><p>@ 2026 TransitKey. All rights reserved</p></div>
+      <div class="flex gap-4">
+        <span><a href="#">Privacy Policy</a></span>
+        <span><a href="#">Terms of Service</a></span>
+        <span><a href="#">Help Center</a></span>
+      </div>
+    </footer>
+
+    
+      <script type="module" src="./profile.js"></script>
+  </body>
+</html>

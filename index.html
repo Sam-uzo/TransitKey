@@ -1,136 +1,46 @@
 <!doctype html>
-<html land="en">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width = device-width, initial-scale= 1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Create Account</title>
+    <title>TransitKey</title>
+    <style>
+      body { font-family: 'Inter', system-ui, sans-serif; }
+    </style>
   </head>
-  <body class="min-h-screen w-full flex flex-col justify-between items-center">
-    <header
-      class="flex w-full justify-between items-center p-4 px-16 border-b-2 border-gray-300"
-    >
-      <div class="flex-shrink"><h2 class="font-bold text-[#2563EB] text-xl">TransitKey</h2></div>
-      <nav
-        class="flex-shrink flex justify-center items-center w-1/2 text-1xl text-gray-700 font-medium gap-4"
-      >
-        <span ><a href="./passenger-home.html" class="hover:underline">Home</a></span>
-        <span><a href="./Passenger-route.html" class="hover:underline">Route</a></span>
-        <span><a href="./passenger-details.html" class="hover:underline">Details</a></span>
-        <span><a href="./passenger-map.html" class="hover:underline">Map</a></span>
-        <span><a href="./passenger-report.html" class="hover:underline">Report</a></span>
-        <span><a href="./passenger-notification.html" class="hover:underline">Notification</a></span>
-        <span><a href="./passenger-profile.html" class="hover:underline">Profile</a></span>
-      </nav>
-      <div>
-        <button class="SignUp-btn bg-[#2563EB] text-white p-2 px-4">Sign-up/Login</button>
+  <body>
+
+    <!-- ======================================================
+         DESKTOP MAIN (show on md and above, hide on mobile)
+         To show desktop: add class "hidden md:flex" to desktop-main
+         To show mobile:  add class "flex md:hidden" to mobile-main
+    ====================================================== -->
+
+    <!-- DESKTOP MAIN -->
+    <main id="desktop-main" class="hidden md:flex min-h-screen w-full bg-[#2563EB] items-center justify-center">
+      <div class="flex flex-col items-center gap-4">
+        <div class="flex items-center gap-4">
+          <!-- Bus SVG icon -->
+          <svg class="w-20 h-20 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/>
+          </svg>
+          <h1 class="text-white font-black text-6xl tracking-wide">TRANSITKEY</h1>
+        </div>
       </div>
-    </header>
-
-    <main
-      class="p-8 m-4 flex justify-center items-center border-4 border-[#C2C2C2]"
-    >
-      <section class="flex flex-col w-full justify-center gap-4">
-        <div>
-          <span><h2 class="text-xl font-semibold">Create Account</h2></span>
-          <span
-            ><p class="text-sm font-medium text-[]">
-              Join the TransitKey network for efficient logistics management.
-            </p></span
-          >
-        </div>
-
-        <div>
-          <span><p class="font-medium">Full Name</p></span>
-          <span
-            ><input
-              class=" text-sm border-2 w-full p-2 border-[#C2C2C2]"
-              type="text"
-              placeholder="Isaiah Adebayo"
-          /></span>
-        </div>
-
-        <div>
-          <span><p class="font-medium">Phone Number</p></span>
-          <span
-            ><input
-              class="text-sm border-2 w-full p-2 border-[#C2C2C2]"
-              type="tel"
-              placeholder="+234 08095674832"
-          /></span>
-        </div>
-        <div>
-          <span><p class="font-medium">Email Address</p></span>
-          <span
-            ><input
-              class=" text-sm border-2 w-full p-2 border-[#C2C2C2]"
-              type="email"
-              placeholder="name@gmail.com"
-          /></span>
-        </div>
-
-        <div class="flex flex-col w-full">
-          <div class="flex w-full gap-4">
-            <div class="w-1/2">
-              <span><p class="font-medium">Password</p></span>
-              <span
-                ><input
-                  class="font-bold text-base border-2 w-full p-1 border-[#C2C2C2]"
-                  type="password"
-                  placeholder="--- --- ---"
-              /></span>
-            </div>
-
-            <div class="w-1/2">
-              <span><p class=" font-medium">Confirm Password</p></span>
-              <span
-                ><input
-                  class="font-bold text-base border-2 w-full p-1 border-[#C2C2C2]"
-                  type="password"
-                  placeholder="--- --- ---"
-              /></span>
-            </div>
-          </div>
-
-          <div class="flex gap-2">
-            <span><input class=" hover:cursor-pointer" type="checkbox" /></span>
-            <span>
-              <p class="text-sm font-medium">
-                I agree to the
-                <span class="underline"><a href="#">Terms of Service</a></span>
-                and <span class="underline"><a href="#">Privacy Policy</a></span
-                >.
-              </p>
-            </span>
-          </div>
-        </div>
-
-        <div class="py-4 w-full flex flex-col justify-center items-center">
-          <div class="w-full">
-            <button class="register-submit p-2 w-full text-white bg-[#2563EB]">
-              CREATE ACCOUNT
-            </button>
-          </div>
-          <div class="p-4">
-            <a href="passenger-login.html" class="text-[#2563EB]"
-              >Already have an account? <span class="font-bold">Log in</span></a
-            >
-          </div>
-        </div>
-      </section>
     </main>
 
-    <footer
-      class="bg-[#C2C2C2] border-t-4 flex justify-end items-center w-full gap-16 px-16 py-1 border-gray-300 text-[#4B5563] text-sm font-normal"
-    >
-      <div><p>@ 2026 TransitKey. All rights reserved</p></div>
-      <div class="flex gap-4">
-        <span><a href="#">Privacy Policy</a> </span>
-        <span><a href="#">Terms of Service</a></span>
-        <span><a href="#">Help Center</a></span>
+    <!-- MOBILE MAIN -->
+    <main id="mobile-main" class="flex md:hidden min-h-screen w-full bg-[#2563EB] items-center justify-center">
+      <div class="flex items-center gap-3">
+        <!-- Bus SVG icon -->
+        <svg class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/>
+        </svg>
+        <h1 class="text-white font-black text-3xl tracking-wide">TRANSITKEY</h1>
       </div>
-    </footer>
+    </main>
 
-    <script type="module" src="./register.js"></script>
+    <script type="module" src="./splash.js"></script>
   </body>
 </html>
