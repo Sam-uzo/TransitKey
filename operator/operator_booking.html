@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transitkey Ops – Passenger Booking</title>
+  <style>
+    :root {
+      --primary:       #2E3A8C;
+      --primary-dark1: #1B2562;
+      --accent:        #3B6FE8;
+      --accent-light:  #C8D4F8;
+      --black:         #141414;
+      --gray-700:      #3D3D3D;
+      --gray-600:      #5C5C5C;
+      --gray-500:      #6E6E6E;
+      --gray-400:      #8F8F8F;
+      --gray-300:      #B8B8B8;
+      --gray-200:      #D4D4D4;
+      --gray-100:      #E8E8E8;
+      --gray-50:       #F5F5F5;
+      --white:         #FFFFFF;
+      --success:       #00B37A;
+      --success-bg:    #E6FAF4;
+      --warning:       #F5A623;
+      --warning-bg:    #FFF8E6;
+      --error:         #EF4B5E;
+      --error-bg:      #FEF0F1;
+      --page-bg:       #F0F2F8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--page-bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: var(--black);
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-100);
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+
+    .nav-logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--gray-600);
+      text-decoration: none;
+      padding-bottom: 3px;
+      transition: color 0.15s;
+    }
+
+    .nav-links a.active {
+      color: var(--black);
+      font-weight: 600;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .nav-clock { font-size: 13px; font-weight: 600; color: var(--gray-600); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--black); border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: flex; flex-direction: column;
+      background: var(--white); border-bottom: 1px solid var(--gray-100);
+      overflow: hidden; max-height: 0;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      padding: 0 20px; position: relative; z-index: 199;
+    }
+
+    .mobile-menu a {
+      font-size: 15px; color: var(--gray-600); text-decoration: none;
+      padding: 10px 0; border-bottom: 1px solid var(--gray-100);
+      opacity: 0; transform: translateY(-8px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a.active { color: var(--accent); font-weight: 600; }
+    .mobile-menu.open { max-height: 400px; padding: 12px 20px 16px; }
+    .mobile-menu.open a { opacity: 1; transform: translateY(0); }
+    .mobile-menu.open a:nth-child(1) { transition-delay: 0.05s; }
+    .mobile-menu.open a:nth-child(2) { transition-delay: 0.10s; }
+    .mobile-menu.open a:nth-child(3) { transition-delay: 0.15s; }
+    .mobile-menu.open a:nth-child(4) { transition-delay: 0.20s; }
+    .mobile-menu.open a:nth-child(5) { transition-delay: 0.25s; }
+    .mobile-menu.open a:nth-child(6) { transition-delay: 0.30s; }
+    .mobile-menu.open a:nth-child(7) { transition-delay: 0.35s; }
+
+    /* ── PAGE ── */
+    .page-body {
+      flex: 1;
+      padding: 32px 40px 48px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .page-header { margin-bottom: 28px; }
+    .page-header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    .page-header p  { font-size: 14px; color: var(--gray-600); }
+
+    /* ── METRICS ── */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .metric-card {
+      background: var(--white);
+      border: 1px solid var(--gray-100);
+      border-radius: 8px;
+      padding: 18px 20px;
+    }
+
+    .mc-label {
+      font-size: 12px; color: var(--gray-500);
+      margin-bottom: 6px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .mc-value {
+      font-size: 28px; font-weight: 700; color: var(--black);
+      line-height: 1; margin-bottom: 4px;
+    }
+
+    .mc-sub { font-size: 12px; color: var(--gray-400); }
+
+    /* ── TWO COLUMN LAYOUT ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-100);
+      border-radius: 10px;
+      padding: 28px 28px;
+    }
+
+    .card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .card .card-sub {
+      font-size: 13px;
+      color: var(--gray-600);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* ── FIELDS ── */
+    .field { margin-bottom: 16px; }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 6px;
+    }
+
+    .select-wrap { position: relative; }
+
+    .select-wrap select {
+      width: 100%; height: 44px;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      padding: 0 36px 0 13px;
+      font-size: 14px; color: var(--gray-500);
+      background: var(--white); outline: none;
+      appearance: none; cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+
+    .select-wrap select.filled { color: var(--black); }
+    .select-wrap select:focus { border-color: var(--accent); }
+
+    .select-wrap svg {
+      position: absolute; right: 12px; top: 50%;
+      transform: translateY(-50%); pointer-events: none; color: var(--gray-400);
+    }
+
+    .field input {
+      width: 100%; height: 44px;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      padding: 0 13px;
+      font-size: 14px; color: var(--black);
+      background: var(--white); outline: none;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+
+    .field input:focus { border-color: var(--accent); }
+    .field input::placeholder { color: var(--gray-400); }
+
+    /* Code input special styling */
+    .code-input {
+      font-size: 20px !important;
+      font-weight: 700 !important;
+      letter-spacing: 4px !important;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    /* ── SEAT BAR ── */
+    .seat-bar-wrap {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-100);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 4px;
+    }
+
+    .seat-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .seat-bar-label { color: var(--gray-600); }
+    .seat-bar-count { font-weight: 700; color: var(--black); font-size: 15px; }
+
+    .seat-bar-track {
+      height: 8px;
+      background: var(--gray-200);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .seat-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+
+    .seat-bar-fill.almost-full { background: var(--warning); }
+    .seat-bar-fill.full        { background: var(--error); }
+
+    .seat-bar-sub {
+      font-size: 12px;
+      color: var(--gray-500);
+      text-align: right;
+    }
+
+    /* ── PASSENGER LOG TABLE ── */
+    .log-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--black);
+      margin: 20px 0 10px;
+      padding-top: 20px;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .log-table-wrap {
+      border: 1px solid var(--gray-100);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead { background: var(--gray-50); }
+
+    thead th {
+      padding: 9px 12px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      color: var(--gray-500); text-align: left;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    tbody tr { border-bottom: 1px solid var(--gray-100); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #F7F9FF; }
+
+    tbody td {
+      padding: 10px 12px;
+      font-size: 13px; color: var(--black);
+    }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      width: 100%;
+      background: var(--accent);
+      color: var(--white);
+      border: none; border-radius: 6px;
+      height: 46px; font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      margin-bottom: 16px;
+    }
+
+    .btn-primary:hover  { background: var(--primary); }
+    .btn-primary:active { transform: scale(0.99); }
+
+    /* ── VERIFY RESULT ── */
+    .verify-result {
+      border-radius: 8px;
+      padding: 18px;
+      display: none;
+      animation: slideDown 0.25s ease;
+    }
+
+    .verify-result.visible { display: block; }
+    .verify-result.valid   { background: var(--success-bg); border: 1.5px solid var(--success); }
+    .verify-result.invalid { background: var(--error-bg);   border: 1.5px solid var(--error); }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .verify-code-display {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-align: center;
+      color: var(--black);
+      margin-bottom: 4px;
+    }
+
+    .verify-status {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .verify-status.valid-text   { color: var(--success); }
+    .verify-status.invalid-text { color: var(--error); }
+
+    .verify-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .verify-row:last-child { border-bottom: none; }
+    .verify-row .vr-key { color: var(--gray-600); }
+    .verify-row .vr-val { font-weight: 600; color: var(--black); }
+
+    .btn-confirm {
+      width: 100%;
+      background: var(--success);
+      color: var(--white);
+      border: none; border-radius: 6px;
+      height: 44px; font-size: 14px; font-weight: 600;
+      cursor: pointer; margin-top: 14px;
+      transition: background 0.15s;
+    }
+
+    .btn-confirm:hover { background: #009A68; }
+
+    /* Error message */
+    .form-error {
+      display: none;
+      color: var(--error);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .form-error.visible { display: block; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--black); color: var(--white);
+      padding: 12px 24px; border-radius: 8px;
+      font-size: 14px; font-weight: 500;
+      opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none; white-space: nowrap; z-index: 999;
+    }
+
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--gray-100);
+      padding: 16px 40px;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      font-size: 12px; color: var(--gray-400);
+    }
+
+    .footer-links { display: flex; gap: 22px; }
+    .footer-links a { color: var(--gray-400); text-decoration: none; }
+    .footer-links a:hover { color: var(--gray-600); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .two-col { grid-template-columns: 1fr; }
+      .metrics-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .page-body { padding: 24px 16px; }
+      .metrics-row { grid-template-columns: repeat(2, 1fr); }
+      footer { flex-direction: column; gap: 10px; text-align: center; padding: 16px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .metrics-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">Transitkey</a>
+        <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="route_assignment.html">Route</a></li>
+      <li><a href="operator_fleet.html">Details</a></li>
+      <li><a href="logged_expenses.html">Expenses</a></li>
+      <li><a href="operator_map.html">Map</a></li>
+      <li><a href="operator_complaints.html">Reports</a></li>
+      <li><a href="#">Notification</a></li>
+      <li><a href="#">Profile</a></li>
+    </ul>
+    <div class="nav-right">
+      <span class="nav-clock" id="navClock"></span>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#">Home</a>
+    <a href="#">Route</a>
+    <a href="#">Details</a>
+    <a href="#">Map</a>
+    <a href="#">Report</a>
+    <a href="#">Notification</a>
+    <a href="#">Profile</a>
+  </div>
+
+  <!-- PAGE -->
+  <div class="page-body">
+
+    <div class="page-header">
+      <h1>Passenger Booking</h1>
+      <p>Add walk-in passengers and verify booking codes for all active routes.</p>
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics-row" id="metricsRow"></div>
+
+    <!-- TWO COLUMNS -->
+    <div class="two-col">
+
+      <!-- LEFT: Walk-in passengers -->
+      <div class="card">
+        <h2>Add Walk-in Passengers</h2>
+        <p class="card-sub">For passengers who paid offline. Updates the live seat count visible to passengers on the platform.</p>
+
+        <p class="form-error" id="walkinError"></p>
+
+        <div class="field">
+          <label for="walkinRoute">Route</label>
+          <div class="select-wrap">
+            <select id="walkinRoute" onchange="updateSeatBar(); this.classList.toggle('filled', this.value !== '')">
+              <option value="">Select a route...</option>
+              <option value="jibowu-ibadan">Jibowu → Ibadan Terminal</option>
+              <option value="oshodi-berger">Oshodi → Berger</option>
+              <option value="ikorodu-tbs">Ikorodu → TBS</option>
+              <option value="lagos-abuja">Lagos → Abuja</option>
+              <option value="imo-enugu">Imo → Enugu</option>
+            </select>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="walkinDate">Date</label>
+          <input type="date" id="walkinDate" />
+        </div>
+
+        <div class="field">
+          <label for="walkinCount">Number of walk-in passengers</label>
+          <input type="number" id="walkinCount" placeholder="e.g. 3" min="1" max="40" oninput="previewSeatBar()" />
+        </div>
+
+        <button class="btn-primary" onclick="addWalkinPassengers()">Add Passengers</button>
+
+        <!-- Live Seat Bar -->
+        <div class="seat-bar-wrap" id="seatBarWrap">
+          <div class="seat-bar-header">
+            <span class="seat-bar-label" id="seatBarRoute">Select a route to view seat count</span>
+            <span class="seat-bar-count" id="seatBarCount">— / —</span>
+          </div>
+          <div class="seat-bar-track">
+            <div class="seat-bar-fill" id="seatBarFill" style="width:0%"></div>
+          </div>
+          <div class="seat-bar-sub" id="seatBarSub">—</div>
+        </div>
+
+        <!-- Passenger log -->
+        <p class="log-title">Today's walk-in log</p>
+        <div class="log-table-wrap">
+          <table>
+            <thead>
+              <tr><th>Route</th><th>Count</th><th>Added by</th><th>Time</th></tr>
+            </thead>
+            <tbody id="walkinLog"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RIGHT: Code verification -->
+      <div class="card">
+        <h2>Verify Passenger Code</h2>
+        <p class="card-sub">Enter the booking code given to the passenger to confirm their seat after payment has been made.</p>
+
+        <p class="form-error" id="verifyError"></p>
+
+        <div class="field">
+          <label for="bookingCode">Booking code</label>
+          <input
+            type="text"
+            id="bookingCode"
+            class="code-input"
+            placeholder="TK-0000"
+            maxlength="7"
+            oninput="formatCode(this)"
+          />
+        </div>
+
+        <button class="btn-primary" onclick="verifyCode()">Verify Code</button>
+
+        <!-- Result -->
+        <div class="verify-result" id="verifyResult">
+          <p class="verify-code-display" id="verifyCodeDisplay"></p>
+          <p class="verify-status" id="verifyStatusText"></p>
+          <div id="verifyDetails"></div>
+          <button class="btn-confirm" id="confirmSeatBtn" onclick="confirmSeat()" style="display:none;">
+            Confirm Seat ✓
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>&#64; 2026 Transitkey. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Help Center</a>
+    </div>
+  </footer>
+
+  <script src="operator_booking.js"></script>
+</body>
+</html>

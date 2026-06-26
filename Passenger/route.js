@@ -55,4 +55,15 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
+
+  let anchors = document.getElementsByTagName("a");
+
+  console.log(anchors);
 });
+// const isLogged = false;
+// const sessionName = sessionStorage.getItem("name")
+// if (sessionStorage){
+//   isLogged = true
+// }else if(!sessionName){
+
+// }

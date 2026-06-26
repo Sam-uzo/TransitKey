@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Transitkey – Map</title>
+  <title>Transitkey – Expenses</title>
   <style>
     :root {
       --primary:       #2E3A8C;
@@ -24,14 +24,13 @@
       --success:       #00B37A;
       --warning:       #F5A623;
       --error:         #EF4B5E;
-      --error-bg:      #FEF0F1;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--gray-50);
+      background: var(--white);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -50,7 +49,6 @@
       position: sticky;
       top: 0;
       z-index: 200;
-      overflow: hidden;
     }
 
     .nav-logo {
@@ -131,8 +129,7 @@
       max-height: 0;
       transition: max-height 0.35s ease, padding 0.35s ease;
       padding: 0 20px;
-      position: sticky;
-      top: 60px;
+      position: relative;
       z-index: 199;
     }
 
@@ -149,7 +146,6 @@
 
     .mobile-menu a:last-child { border-bottom: none; }
     .mobile-menu a.active { color: var(--accent); font-weight: 600; }
-
     .mobile-menu.open { max-height: 400px; padding: 12px 20px 16px; }
     .mobile-menu.open a { opacity: 1; transform: translateY(0); }
     .mobile-menu.open a:nth-child(1) { transition-delay: 0.05s; }
@@ -160,349 +156,326 @@
     .mobile-menu.open a:nth-child(6) { transition-delay: 0.30s; }
     .mobile-menu.open a:nth-child(7) { transition-delay: 0.35s; }
 
-    /* ── MAIN LAYOUT ── */
-    .main {
+    /* ── PAGE BODY ── */
+    .page-body {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      padding: 36px 40px 48px;
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
     }
 
-    /* ── ALERT BANNER ── */
-    .alert-banner {
-      background: var(--error-bg);
-      border: 1px solid var(--error);
-      border-radius: 6px;
-      margin: 16px 20px 0;
-      padding: 10px 14px;
+    /* ── PAGE HEADER ── */
+    .page-header {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      font-size: 13px;
-      color: var(--error);
-      animation: slideDown 0.4s ease;
+      justify-content: space-between;
+      margin-bottom: 28px;
     }
 
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 6px;
     }
 
-    .alert-banner svg { flex-shrink: 0; margin-top: 1px; }
-    .alert-banner strong { display: block; font-weight: 700; margin-bottom: 2px; }
-    .alert-banner p { color: var(--gray-700); font-size: 12.5px; line-height: 1.5; }
-
-    .alert-close {
-      margin-left: auto;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--gray-400);
-      font-size: 16px;
-      line-height: 1;
-      flex-shrink: 0;
+    .page-header p {
+      font-size: 14px;
+      color: var(--gray-600);
     }
 
-    /* ── MAP + PANEL CONTAINER ── */
-    .map-container {
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      flex: 1;
-      height: calc(100vh - 60px);
-      overflow: hidden;
-    }
-
-    /* ── MAP AREA ── */
-    .map-area {
-      position: relative;
-      background: #1a2035;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    /* Fake map grid lines */
-    .map-area::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    /* Fake roads */
-    .map-roads {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .map-placeholder {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      color: rgba(255,255,255,0.25);
-      z-index: 1;
-    }
-
-    .map-placeholder svg { width: 72px; height: 72px; opacity: 0.4; }
-    .map-placeholder p { font-size: 13px; letter-spacing: 0.5px; }
-
-    /* Animated location pulse */
-    .map-pulse {
-      position: absolute;
-      bottom: 30%;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-    }
-
-    .pulse-ring {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: var(--accent);
-      position: relative;
-    }
-
-    .pulse-ring::before,
-    .pulse-ring::after {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      border: 2px solid var(--accent);
-      animation: ripple 2s ease-out infinite;
-    }
-
-    .pulse-ring::after { animation-delay: 0.6s; }
-
-    @keyframes ripple {
-      0%   { transform: scale(0.8); opacity: 0.8; }
-      100% { transform: scale(2.5); opacity: 0; }
-    }
-
-    /* ── MAP CONTROLS ── */
-    .map-controls {
-      position: absolute;
-      bottom: 48px;
-      right: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      z-index: 3;
-    }
-
-    .map-ctrl-btn {
-      width: 32px;
-      height: 32px;
-      background: var(--white);
-      border: 1px solid var(--gray-200);
-      border-radius: 4px;
-      font-size: 18px;
-      font-weight: 300;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--gray-700);
-      transition: background 0.15s;
-    }
-
-    .map-ctrl-btn:hover { background: var(--gray-50); }
-
-    /* ── CURRENT LOCATION BAR ── */
-    .location-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(26, 32, 53, 0.92);
-      backdrop-filter: blur(6px);
-      padding: 10px 16px;
+    .submit-btn {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.8);
-      letter-spacing: 0.3px;
-      z-index: 3;
-    }
-
-    .location-bar svg { flex-shrink: 0; color: var(--accent); }
-
-    /* ── RIGHT PANEL ── */
-    .route-panel {
-      background: var(--white);
-      border-left: 1px solid var(--gray-100);
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-    }
-
-    .panel-section {
-      padding: 18px 20px;
-      border-bottom: 1px solid var(--gray-100);
-    }
-
-    .panel-section:last-child { border-bottom: none; }
-
-    .panel-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: var(--gray-400);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-
-    .route-name {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--black);
-      margin-bottom: 6px;
-    }
-
-    .route-warning {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--warning);
-      font-weight: 500;
-    }
-
-    /* ── ETA ROW ── */
-    .eta-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 4px;
-    }
-
-    .eta-item .eta-label {
-      font-size: 11px;
-      color: var(--gray-400);
-      margin-bottom: 3px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .eta-item .eta-value {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--black);
-    }
-
-    .eta-delay {
-      font-size: 12px;
-      color: var(--error);
-      font-weight: 600;
-      margin-left: 4px;
-    }
-
-    .eta-item .eta-dist {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--black);
-    }
-
-    /* ── STOP TIMELINE ── */
-    .stops-list { display: flex; flex-direction: column; gap: 0; }
-
-    .stop-item {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      position: relative;
-      padding-bottom: 18px;
-    }
-
-    .stop-item:last-child { padding-bottom: 0; }
-
-    .stop-indicator {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .stop-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      border: 2px solid var(--gray-300);
-      background: var(--white);
-      flex-shrink: 0;
-      z-index: 1;
-    }
-
-    .stop-dot.done   { background: var(--success); border-color: var(--success); }
-    .stop-dot.active { background: var(--accent);  border-color: var(--accent); animation: pulse 2s infinite; }
-    .stop-dot.upcoming { background: var(--white); border-color: var(--gray-300); }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(59,111,232,0.4); }
-      50%       { box-shadow: 0 0 0 5px rgba(59,111,232,0); }
-    }
-
-    .stop-line {
-      width: 2px;
-      flex: 1;
-      min-height: 24px;
-      background: var(--gray-200);
-      margin-top: 2px;
-    }
-
-    .stop-line.done { background: var(--success); }
-
-    .stop-info { flex: 1; }
-
-    .stop-name {
+      border: 1.5px solid var(--gray-300);
+      border-radius: 6px;
+      padding: 10px 18px;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--black);
-      margin-bottom: 2px;
+      background: var(--white);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color 0.15s, background 0.15s;
+      flex-shrink: 0;
     }
 
-    .stop-name.muted { color: var(--gray-400); font-weight: 500; }
+    .submit-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    .stop-meta {
-      font-size: 12px;
+    /* ── FILTERS ── */
+    .filters {
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .filter-group { display: flex; flex-direction: column; gap: 6px; }
+
+    .filter-group label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--black);
+    }
+
+    .filter-group .date-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-input {
+      height: 40px;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      padding: 0 12px;
+      font-size: 13px;
       color: var(--gray-500);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.15s;
     }
 
-    .stop-meta.success { color: var(--success); font-weight: 500; }
+    .filter-input:focus { border-color: var(--accent); }
 
-    /* ── MARK ARRIVED BTN ── */
-    .arrived-btn {
-      width: 100%;
+    .date-input-wrap {
+      position: relative;
+    }
+
+    .date-input-wrap input {
+      height: 40px;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      padding: 0 36px 0 12px;
+      font-size: 13px;
+      color: var(--gray-500);
+      background: var(--white);
+      outline: none;
+      width: 148px;
+      transition: border-color 0.15s;
+    }
+
+    .date-input-wrap input:focus { border-color: var(--accent); }
+
+    .date-input-wrap svg {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--gray-400);
+    }
+
+    .select-wrap {
+      position: relative;
+    }
+
+    .select-wrap select {
+      height: 40px;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      padding: 0 32px 0 12px;
+      font-size: 13px;
+      color: var(--gray-500);
+      background: var(--white);
+      outline: none;
+      appearance: none;
+      cursor: pointer;
+      min-width: 140px;
+      transition: border-color 0.15s;
+    }
+
+    .select-wrap select:focus { border-color: var(--accent); }
+
+    .select-wrap svg {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--gray-400);
+    }
+
+    .combo-wrap {
+      position: relative;
+    }
+
+    .combo-input {
+      width: 160px;
+      padding-right: 28px;
+      cursor: text;
+    }
+
+    .combo-wrap svg {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--gray-400);
+    }
+
+    .apply-btn {
+      height: 40px;
       background: var(--accent);
       color: var(--white);
       border: none;
       border-radius: 6px;
-      height: 44px;
+      padding: 0 28px;
       font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-      text-transform: uppercase;
+      transition: background 0.15s;
+      white-space: nowrap;
+      margin-left: auto;
     }
 
-    .arrived-btn:hover  { background: var(--primary); }
-    .arrived-btn:active { transform: scale(0.98); }
+    .apply-btn:hover { background: var(--primary); }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: var(--gray-50);
+    }
+
+    thead th {
+      padding: 14px 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      color: var(--black);
+      text-align: left;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--gray-100);
+      transition: background 0.12s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #F7F9FF; }
+
+    tbody td {
+      padding: 18px 20px;
+      font-size: 14px;
+      color: var(--black);
+      vertical-align: middle;
+    }
+
+    td.description { font-style: italic; color: var(--gray-700); }
+
+    td.amount { font-weight: 600; }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 99px;
+    }
+
+    .status-pill.pending  { color: var(--warning);  background: #FFF8E6; }
+    .status-pill.approved { color: var(--success);  background: #E6FAF4; }
+    .status-pill.rejected { color: var(--error);    background: #FEF0F1; }
+
+    .status-dot-sm {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .pending  .status-dot-sm { background: var(--warning); }
+    .approved .status-dot-sm { background: var(--success); }
+    .rejected .status-dot-sm { background: var(--error); }
+
+    /* Actions cell */
+    .action-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: 1px solid var(--gray-200);
+      background: var(--white);
+      cursor: pointer;
+      color: var(--gray-700);
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .action-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .action-btn.delete:hover { border-color: var(--error); color: var(--error); }
+
+    /* ── PAGINATION ── */
+    .table-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .table-footer p {
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .page-btn {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--gray-200);
+      border-radius: 5px;
+      background: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-600);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .page-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .page-btn.active { background: var(--accent); color: var(--white); border-color: var(--accent); }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
     /* ── FOOTER ── */
     footer {
       background: var(--gray-50);
       border-top: 1px solid var(--gray-100);
-      padding: 14px 40px;
+      padding: 16px 40px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -518,15 +491,36 @@
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
       .nav-links { display: none; }
-      .nav-btn { display: none; }
       .hamburger { display: flex; }
-      .map-container { grid-template-columns: 1fr; grid-template-rows: 1fr auto; height: auto; }
-      .map-area { height: 50vh; }
-      .route-panel { max-height: 50vh; border-left: none; border-top: 1px solid var(--gray-100); }
-      footer { display: none; }
+      .page-body { padding: 24px 20px; }
+      .page-header { flex-direction: column; gap: 14px; }
+      .filters { flex-direction: column; align-items: stretch; }
+      .combo-wrap {
+      position: relative;
+    }
+
+    .combo-input {
+      width: 160px;
+      padding-right: 28px;
+      cursor: text;
+    }
+
+    .combo-wrap svg {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--gray-400);
+    }
+
+    .apply-btn { margin-left: 0; width: 100%; }
+      .table-wrap { overflow-x: auto; }
+      table { min-width: 640px; }
+      footer { flex-direction: column; gap: 10px; text-align: center; padding: 16px 20px; }
     }
   
-    .nav-logo-img { height: 90px; width: auto; object-fit: contain; cursor: pointer; display: block; flex-shrink: 0; }
+    .nav-logo-img { height: 40px; width: auto; object-fit: contain; cursor: pointer; display: block; flex-shrink: 0; }
   </style>
 </head>
 <body>
@@ -537,8 +531,8 @@
     <ul class="nav-links">
       <li><a href="transitkey_dashboard.html">Home</a></li>
       <li><a href="#">Trip</a></li>
-      <li><a href="#" class="active">Map</a></li>
-      <li><a href="#">Expenses</a></li>
+      <li><a href="transitkey_map.html">Map</a></li>
+      <li><a href="#" class="active">Expenses</a></li>
       <li><a href="#">Report</a></li>
       <li><a href="#">Notification</a></li>
       <li><a href="#">Profile</a></li>
@@ -556,114 +550,116 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="transitkey_dashboard.html">Home</a>
     <a href="#">Trip</a>
-    <a href="#" class="active">Map</a>
-    <a href="#">Expenses</a>
+    <a href="transitkey_map.html">Map</a>
+    <a href="#" class="active">Expenses</a>
     <a href="#">Report</a>
     <a href="#">Notification</a>
     <a href="#">Profile</a>
   </div>
 
-  <div class="main">
+  <!-- PAGE BODY -->
+  <div class="page-body">
 
-    <!-- ALERT BANNER -->
-    <div class="alert-banner" id="alertBanner">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-      </svg>
+    <!-- HEADER -->
+    <div class="page-header">
       <div>
-        <strong>LIVE SYSTEM UPDATE</strong>
-        <p>Congestion ahead on along RCCG road is causing a 4-minute delay for all routes.</p>
+        <h1>Expense History</h1>
+        <p>Track and manage your transport expenses submitted during trips.</p>
       </div>
-      <button class="alert-close" onclick="dismissAlert()">✕</button>
+      <button class="submit-btn" onclick="openSubmitModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        Submit New Expense
+      </button>
     </div>
 
-    <!-- MAP + PANEL -->
-    <div class="map-container">
-
-      <!-- MAP -->
-      <div class="map-area">
-        <!-- Fake road lines via SVG -->
-        <svg class="map-roads" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
-          <line x1="0" y1="300" x2="800" y2="300" stroke="rgba(255,255,255,0.07)" stroke-width="12"/>
-          <line x1="400" y1="0" x2="400" y2="600" stroke="rgba(255,255,255,0.07)" stroke-width="12"/>
-          <path d="M0,150 Q200,150 300,300 T600,400 T800,350" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="none"/>
-          <path d="M0,450 Q300,420 500,300 T800,200" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="none"/>
-          <line x1="0" y1="300" x2="800" y2="300" stroke="rgba(59,111,232,0.3)" stroke-width="4" stroke-dasharray="12 8"/>
-        </svg>
-
-        <div class="map-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-            <path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/>
-            <line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>
-          </svg>
-          <p>Map integration pending</p>
-        </div>
-
-        <!-- Live location pulse -->
-        <div class="map-pulse">
-          <div class="pulse-ring"></div>
-        </div>
-
-        <!-- Zoom controls -->
-        <div class="map-controls">
-          <button class="map-ctrl-btn" title="Zoom in">+</button>
-          <button class="map-ctrl-btn" title="Zoom out">−</button>
-          <button class="map-ctrl-btn" title="My location">
+    <!-- FILTERS -->
+    <div class="filters">
+      <div class="filter-group">
+        <label>Date Range</label>
+        <div class="date-row">
+          <div class="date-input-wrap">
+            <input type="date" id="dateFrom" placeholder="mm/dd/yyyy" />
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+              <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
             </svg>
-          </button>
-        </div>
-
-        <!-- Current location bar -->
-        <div class="location-bar">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-          </svg>
-          <span id="locationBar">📍 CURRENT LOCATION: REDEMPTION CAMP ROAD</span>
+          </div>
+          <div class="date-input-wrap">
+            <input type="date" id="dateTo" placeholder="mm/dd/yyyy" />
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
         </div>
       </div>
 
-      <!-- RIGHT PANEL -->
-      <div class="route-panel">
-
-        <!-- Current Route -->
-        <div class="panel-section">
-          <p class="panel-label">Current Route</p>
-          <p class="route-name" id="routeName">Redemption Camp</p>
-          <div class="route-warning">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-            </svg>
-            <span id="trafficWarning">Heavy traffic on Maryland Highway</span>
-          </div>
+      <div class="filter-group">
+        <label>Expense Type</label>
+        <div class="combo-wrap">
+          <input
+            type="text"
+            id="filterType"
+            class="filter-input combo-input"
+            placeholder="All Types"
+            list="expenseTypeList"
+            autocomplete="off"
+          />
+          <datalist id="expenseTypeList">
+            <option value="Fuel Purchase">
+            <option value="Park Levy">
+            <option value="Bus Repair">
+            <option value="Tyre Replacement">
+          </datalist>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
         </div>
+      </div>
 
-        <!-- Next Stop + ETA -->
-        <div class="panel-section">
-          <p class="panel-label">Next Stop</p>
-          <p class="route-name" id="nextStopName" style="font-size:16px; margin-bottom:12px;">Maryland</p>
-
-          <div class="eta-grid">
-            <div class="eta-item">
-              <p class="eta-label">ETA</p>
-              <p class="eta-value"><span id="etaValue">09:25 AM</span><span class="eta-delay" id="etaDelay">+1 min</span></p>
-            </div>
-            <div class="eta-item">
-              <p class="eta-label">Distance</p>
-              <p class="eta-dist" id="distValue">1.2 km</p>
-            </div>
-          </div>
+      <div class="filter-group">
+        <label>Status</label>
+        <div class="select-wrap">
+          <select id="filterStatus">
+            <option value="">Any Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
         </div>
+      </div>
 
-        <!-- Stop Timeline -->
-        <div class="panel-section" style="flex:1;">
-          <p class="panel-label" style="margin-bottom:16px;">Stops</p>
+      <button class="apply-btn" onclick="applyFilters()">Apply Filters</button>
+    </div>
 
-          <div class="stops-list" id="stopsList"></div>
-        </div><!-- /route-panel -->
-    </div><!-- /map-container -->
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Expense Type</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="expenseTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="table-footer">
+      <p id="paginationInfo">Showing 1-4 of 28 submitted expenses</p>
+      <div class="pagination" id="pagination"></div>
+    </div>
+
   </div>
 
   <!-- FOOTER -->
@@ -676,145 +672,6 @@
     </div>
   </footer>
 
-  <script>
-    // ══════════════════════════════════════════════
-    // MAP DATA — replace with API fetch when ready
-    // e.g. fetch('/api/driver/map').then(r => r.json()).then(data => renderMap(data))
-    // ══════════════════════════════════════════════
-    const MAP_DATA = {
-      alert: {
-        visible: true,
-        message: "Congestion ahead on RCCG road is causing a 4-minute delay for all routes.",
-      },
-      currentRoute:   "Redemption Camp",
-      trafficWarning: "Heavy traffic on Maryland Highway",
-      nextStop:       "Maryland",
-      eta:            "09:25 AM",
-      etaDelayMins:   1,
-      distanceKm:     1.2,
-      currentLocation: "REDEMPTION CAMP ROAD",
-      stops: [
-        { name: "Akowu Motor Park", status: "done",     meta: "Origin · Departed 09:10 AM" },
-        { name: "Mowe",             status: "done",     meta: "Completed" },
-        { name: "Redemption Camp",  status: "active",   meta: "Estimated Arrival: 09:25 AM" },
-        { name: "Ibadan Bus Terminal", status: "upcoming", meta: "Estimated: 10:10 AM" },
-      ],
-    };
-
-    // ── RENDER MAP PANEL FROM DATA ──
-    function renderMap(d) {
-      // Alert
-      const banner = document.getElementById('alertBanner');
-      if (!d.alert.visible) { banner && banner.remove(); }
-      else if (banner) banner.querySelector('p').textContent = d.alert.message;
-
-      // Route info
-      document.getElementById('routeName').textContent       = d.currentRoute;
-      document.getElementById('trafficWarning').textContent  = d.trafficWarning;
-      document.getElementById('nextStopName').textContent    = d.nextStop;
-      document.getElementById('etaValue').textContent        = d.eta;
-      document.getElementById('etaDelay').textContent        = d.etaDelayMins > 0 ? `+${d.etaDelayMins} min` : '';
-      document.getElementById('distValue').textContent       = `${d.distanceKm} km`;
-      document.getElementById('locationBar').textContent     = `📍 CURRENT LOCATION: ${d.currentLocation}`;
-
-      // Stops
-      renderStops(d.stops);
-    }
-
-    function renderStops(stops) {
-      const container = document.getElementById('stopsList');
-      container.innerHTML = '';
-      stops.forEach((stop, i) => {
-        const isLast = i === stops.length - 1;
-        const lineHTML = isLast ? '' : `<div class="stop-line${stop.status === 'done' ? ' done' : ''}"></div>`;
-        const div = document.createElement('div');
-        div.className = 'stop-item';
-        div.innerHTML = `
-          <div class="stop-indicator">
-            <div class="stop-dot ${stop.status}"></div>
-            ${lineHTML}
-          </div>
-          <div class="stop-info">
-            <p class="stop-name${stop.status === 'upcoming' ? ' muted' : ''}">${stop.name}</p>
-            <p class="stop-meta${stop.status === 'done' ? ' success' : ''}">${stop.meta}</p>
-          </div>`;
-        container.appendChild(div);
-      });
-    }
-
-    // ── LIVE CLOCK ──
-    function updateClock() {
-      const now = new Date();
-      const h = now.getHours() % 12 || 12;
-      const m = String(now.getMinutes()).padStart(2,'0');
-      const s = String(now.getSeconds()).padStart(2,'0');
-      const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
-      document.getElementById('navClock').textContent = `${h}:${m}:${s} ${ampm}`;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // ── DISMISS ALERT ──
-    function dismissAlert() {
-      const el = document.getElementById('alertBanner');
-      el.style.transition = 'opacity 0.3s ease, max-height 0.4s ease, margin 0.4s ease, padding 0.4s ease';
-      el.style.opacity = '0';
-      el.style.maxHeight = '0';
-      el.style.padding = '0';
-      el.style.margin = '0';
-      setTimeout(() => el.remove(), 400);
-    }
-
-    // ── MOBILE MENU TOGGLE ──
-    function toggleMenu() {
-      const menu = document.getElementById('mobileMenu');
-      const btn  = document.getElementById('hamburger');
-      menu.classList.toggle('open');
-      btn.classList.toggle('open');
-      btn.setAttribute('aria-expanded', menu.classList.contains('open'));
-    }
-
-    // ── MARK AS ARRIVED ──
-    function markArrived() {
-      const btn = document.querySelector('.arrived-btn');
-      btn.textContent = 'Marking...';
-      btn.disabled = true;
-      btn.style.background = 'var(--success)';
-
-      setTimeout(() => {
-        // Update active stop to done
-        const activeDot = document.querySelector('.stop-dot.active');
-        const activeLine = activeDot?.nextElementSibling;
-        if (activeDot) {
-          activeDot.classList.remove('active');
-          activeDot.classList.add('done');
-        }
-        if (activeLine) activeLine.classList.add('done');
-
-        // Update next stop to active
-        const upcomingDot = document.querySelector('.stop-dot.upcoming');
-        if (upcomingDot) {
-          upcomingDot.classList.remove('upcoming');
-          upcomingDot.classList.add('active');
-          const nameEl = upcomingDot.closest('.stop-item').querySelector('.stop-name');
-          if (nameEl) nameEl.classList.remove('muted');
-        }
-
-        btn.textContent = 'Arrived ✓';
-        btn.style.background = 'var(--success)';
-      }, 1000);
-    }
-
-    // ── ETA DELAY TICK (simulates backend update) ──
-    let delayMins = 1;
-    setInterval(() => {
-      // Randomly fluctuate delay ±1 for realism
-      delayMins = Math.max(0, delayMins + (Math.random() > 0.5 ? 1 : -1));
-      const el = document.getElementById('etaDelay');
-      if (el) el.textContent = delayMins > 0 ? `+${delayMins} min` : '';
-    }, 30000);
-    renderMap(MAP_DATA);
-  </script>
-
+  <script src="transitkey_expenses.js"></script>
 </body>
 </html>

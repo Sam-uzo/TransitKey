@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
           showToast("Logging in...");
           let userDetails;
           let response = await postMidWife(
-            "https://transitkey-be.onrender.com/api/auth/login",
+            "https://transitkey-be.onrender.com/api/auth/passenger/register",
             "POST",
             { "Content-Type": "application/json" },
             "include",

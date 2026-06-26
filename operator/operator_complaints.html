@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transitkey Ops – Complaints & Emergencies</title>
+  <style>
+    :root {
+      --primary:       #2E3A8C;
+      --primary-dark1: #1B2562;
+      --accent:        #3B6FE8;
+      --black:         #141414;
+      --gray-700:      #3D3D3D;
+      --gray-600:      #5C5C5C;
+      --gray-500:      #6E6E6E;
+      --gray-400:      #8F8F8F;
+      --gray-300:      #B8B8B8;
+      --gray-200:      #D4D4D4;
+      --gray-100:      #E8E8E8;
+      --gray-50:       #F5F5F5;
+      --white:         #FFFFFF;
+      --success:       #00B37A;
+      --success-bg:    #E6F8F2;
+      --error:         #EF4B5E;
+      --error-bg:      #FEF0F1;
+      --warning:       #F59E0B;
+      --warning-bg:    #FEF3C7;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-50);
+      color: var(--black);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-100);
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+
+    .nav-logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-links { display: flex; gap: 28px; list-style: none; height: 100%; }
+    .nav-links li { display: flex; align-items: center; height: 100%; }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--gray-600);
+      text-decoration: none;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid transparent;
+      padding: 0 2px;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--black); }
+
+    .nav-links a.active {
+      color: var(--black);
+      font-weight: 600;
+      border-bottom-color: var(--accent);
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-clock { font-size: 13px; font-weight: 600; color: var(--gray-600); }
+
+    /* ── MAIN CONTENT ── */
+    .main-container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .header-info h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .header-info p {
+      color: var(--gray-600);
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark1);
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stat-meta h3 {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-500);
+      margin-bottom: 4px;
+    }
+
+    .stat-meta .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--black);
+    }
+
+    .stat-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stat-icon.emergency { background: var(--error-bg); color: var(--error); }
+    .stat-icon.complaint { background: var(--warning-bg); color: var(--warning); }
+    .stat-icon.feedback { background: var(--success-bg); color: var(--success); }
+
+    /* ── CONTROLS & FILTER ── */
+    .controls-row {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 14px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-300);
+      padding: 8px 12px;
+      border-radius: 6px;
+      width: 320px;
+      max-width: 100%;
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      background: var(--gray-100);
+      padding: 4px;
+      border-radius: 8px;
+      gap: 4px;
+    }
+
+    .filter-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-600);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .filter-btn.active {
+      background: var(--white);
+      color: var(--black);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    /* ── COLUMNS LAYOUT ── */
+    .columns-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .column {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .column-header {
+      padding: 16px 20px;
+      border-bottom: 2px solid var(--gray-100);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .column-header.emergency { border-bottom-color: var(--error); }
+    .column-header.complaint { border-bottom-color: var(--warning); }
+    .column-header.feedback { border-bottom-color: var(--success); }
+
+    .column-title {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .column-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-500);
+      background: var(--gray-100);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .tickets-list {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 400px;
+      background: var(--gray-50);
+    }
+
+    /* ── TICKET CARD ── */
+    .ticket-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 14px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+    }
+
+    .ticket-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .ticket-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .reporter-info {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-700);
+    }
+
+    .reporter-type {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-500);
+    }
+
+    .ticket-desc {
+      font-size: 13.5px;
+      line-height: 1.45;
+      color: var(--black);
+      margin-bottom: 12px;
+    }
+
+    .ticket-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .ticket-date {
+      font-size: 11px;
+      color: var(--gray-500);
+    }
+
+    /* Status Badges */
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .badge.open { background: var(--warning-bg); color: var(--warning); }
+    .badge.resolved { background: var(--success-bg); color: var(--success); }
+    .badge.escalated { background: var(--error-bg); color: var(--error); }
+
+    /* ── TICKET MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      padding: 20px;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-box {
+      background: var(--white);
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+      border: 1px solid var(--gray-200);
+      transform: scale(0.95);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.show .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--gray-500);
+      cursor: pointer;
+    }
+
+    .close-btn:hover { color: var(--black); }
+
+    .modal-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 10px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .modal-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--gray-700);
+      border: 1px solid var(--gray-300);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* Details panel fields */
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: 14px;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: var(--gray-500); font-weight: 500; }
+    .detail-value { font-weight: 600; color: var(--black); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--white);
+      border-left: 4px solid var(--success);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 500;
+      transform: translateY(120%);
+      transition: transform 0.3s ease;
+      z-index: 2000;
+    }
+    .toast.show {
+      transform: translateY(0);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--gray-100);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--gray-400);
+      flex-shrink: 0;
+      margin-top: auto;
+    }
+
+    .footer-links { display: flex; gap: 22px; }
+    .footer-links a { color: var(--gray-400); text-decoration: none; }
+    .footer-links a:hover { color: var(--gray-600); }
+
+    @media (max-width: 900px) {
+      .columns-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">Transitkey</a>
+        <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="route_assignment.html">Route</a></li>
+      <li><a href="operator_fleet.html">Details</a></li>
+      <li><a href="logged_expenses.html">Expenses</a></li>
+      <li><a href="operator_map.html">Map</a></li>
+      <li><a href="operator_complaints.html" class="active">Reports</a></li>
+      <li><a href="#">Notification</a></li>
+      <li><a href="#">Profile</a></li>
+    </ul>
+    <div class="nav-right">
+      <span class="nav-clock" id="navClock"></span>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <div class="main-container">
+    <div class="header-section">
+      <div class="header-info">
+        <h1>Complaints & Emergencies</h1>
+        <p>Monitor real-time passenger feedback, operational complaints, and active emergencies.</p>
+      </div>
+      <button class="btn-primary" onclick="openNewTicketModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        New Ticket
+      </button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-meta">
+          <h3>Active Emergencies</h3>
+          <div class="stat-value" id="stat-emergency">1</div>
+        </div>
+        <div class="stat-icon emergency">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-meta">
+          <h3>Open Complaints</h3>
+          <div class="stat-value" id="stat-complaint">2</div>
+        </div>
+        <div class="stat-icon complaint">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-meta">
+          <h3>Total Suggestions</h3>
+          <div class="stat-value" id="stat-feedback">2</div>
+        </div>
+        <div class="stat-icon feedback">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="controls-row">
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-500)" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search by name, ID or description..." oninput="filterTickets()" />
+      </div>
+
+      <div class="filter-tabs">
+        <button class="filter-btn active" onclick="setFilter('all', this)">All Tickets</button>
+        <button class="filter-btn" onclick="setFilter('open', this)">Open</button>
+        <button class="filter-btn" onclick="setFilter('escalated', this)">Escalated</button>
+        <button class="filter-btn" onclick="setFilter('resolved', this)">Resolved</button>
+      </div>
+    </div>
+
+    <!-- COLUMNS -->
+    <div class="columns-grid">
+      <!-- EMERGENCY -->
+      <div class="column">
+        <div class="column-header emergency">
+          <span class="column-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--error)" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            </svg>
+            Emergencies
+          </span>
+          <span class="column-count" id="count-emergency">0</span>
+        </div>
+        <div class="tickets-list" id="list-emergency"></div>
+      </div>
+
+      <!-- COMPLAINT -->
+      <div class="column">
+        <div class="column-header complaint">
+          <span class="column-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            Complaints
+          </span>
+          <span class="column-count" id="count-complaint">0</span>
+        </div>
+        <div class="tickets-list" id="list-complaint"></div>
+      </div>
+
+      <!-- FEEDBACK -->
+      <div class="column">
+        <div class="column-header feedback">
+          <span class="column-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            Feedback
+          </span>
+          <span class="column-count" id="count-feedback">0</span>
+        </div>
+        <div class="tickets-list" id="list-feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TICKET DETAILS MODAL -->
+  <div id="detailsModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modalTitle">Ticket Details</h2>
+        <button class="close-btn" onclick="closeDetailsModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modalDetailsBody">
+        <!-- Rendered by JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeDetailsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW TICKET MODAL -->
+  <div id="newTicketModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Log New Incident</h2>
+        <button class="close-btn" onclick="closeNewTicketModal()">&times;</button>
+      </div>
+      <form onsubmit="handleNewTicketSubmit(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="newReporter">Reporter Name</label>
+            <input type="text" id="newReporter" placeholder="e.g. Adewale Musa, Passenger in seat 12" required />
+          </div>
+          <div class="form-group">
+            <label for="newReporterType">Reporter Type</label>
+            <select id="newReporterType" required>
+              <option value="driver">Driver</option>
+              <option value="passenger">Passenger</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="newType">Category</label>
+            <select id="newType" required>
+              <option value="emergency">Emergency</option>
+              <option value="complaint">Complaint</option>
+              <option value="feedback">Feedback</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="newDesc">Description</label>
+            <textarea id="newDesc" rows="4" placeholder="Detail the complaint or emergency situation..." required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeNewTicketModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Save Ticket</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>&#64; 2026 Transitkey. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Help Center</a>
+    </div>
+  </footer>
+  <script src="operator_complaints.js"></script>
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transitkey Ops – Fleet & Drivers</title>
+  <style>
+    :root {
+      --primary:       #2E3A8C;
+      --primary-dark1: #1B2562;
+      --accent:        #3B6FE8;
+      --accent-light:  #C8D4F8;
+      --black:         #141414;
+      --gray-600:      #5C5C5C;
+      --gray-500:      #6E6E6E;
+      --gray-400:      #8F8F8F;
+      --gray-300:      #B8B8B8;
+      --gray-200:      #D4D4D4;
+      --gray-100:      #E8E8E8;
+      --gray-50:       #F5F5F5;
+      --white:         #FFFFFF;
+      --success:       #00B37A;
+      --success-bg:    #E6FAF4;
+      --warning:       #F5A623;
+      --warning-bg:    #FFF8E6;
+      --error:         #EF4B5E;
+      --error-bg:      #FEF0F1;
+      --page-bg:       #F0F2F8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--page-bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: var(--black);
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-100);
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+
+    .nav-logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--gray-600);
+      text-decoration: none;
+      padding-bottom: 3px;
+      transition: color 0.15s;
+    }
+
+    .nav-links a.active {
+      color: var(--black);
+      font-weight: 600;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .nav-links a:hover { color: var(--black); }
+
+    .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .nav-clock { font-size: 13px; font-weight: 600; color: var(--gray-600); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--black); border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: flex; flex-direction: column;
+      background: var(--white); border-bottom: 1px solid var(--gray-100);
+      overflow: hidden; max-height: 0;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      padding: 0 20px; position: relative; z-index: 199;
+    }
+
+    .mobile-menu a {
+      font-size: 15px; color: var(--gray-600); text-decoration: none;
+      padding: 10px 0; border-bottom: 1px solid var(--gray-100);
+      opacity: 0; transform: translateY(-8px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a.active { color: var(--accent); font-weight: 600; }
+    .mobile-menu.open { max-height: 400px; padding: 12px 20px 16px; }
+    .mobile-menu.open a { opacity: 1; transform: translateY(0); }
+    .mobile-menu.open a:nth-child(1) { transition-delay: 0.05s; }
+    .mobile-menu.open a:nth-child(2) { transition-delay: 0.10s; }
+    .mobile-menu.open a:nth-child(3) { transition-delay: 0.15s; }
+    .mobile-menu.open a:nth-child(4) { transition-delay: 0.20s; }
+    .mobile-menu.open a:nth-child(5) { transition-delay: 0.25s; }
+    .mobile-menu.open a:nth-child(6) { transition-delay: 0.30s; }
+    .mobile-menu.open a:nth-child(7) { transition-delay: 0.35s; }
+
+    /* ── PAGE ── */
+    .page-body {
+      flex: 1;
+      padding: 32px 40px 48px;
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .page-header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    .page-header p  { font-size: 14px; color: var(--gray-600); }
+
+    /* ── METRICS ── */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .metric-card {
+      background: var(--white);
+      border: 1px solid var(--gray-100);
+      border-radius: 8px;
+      padding: 18px 20px;
+    }
+
+    .mc-label {
+      font-size: 12px; color: var(--gray-500);
+      margin-bottom: 6px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .mc-value { font-size: 28px; font-weight: 700; color: var(--black); line-height: 1; margin-bottom: 4px; }
+    .mc-sub   { font-size: 12px; color: var(--gray-400); }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 28px; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .section-header h2 { font-size: 18px; font-weight: 700; }
+
+    .section-actions { display: flex; gap: 10px; align-items: center; }
+
+    .search-input {
+      height: 38px;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      padding: 0 12px;
+      font-size: 13px;
+      color: var(--black);
+      outline: none;
+      width: 220px;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+
+    .search-input:focus { border-color: var(--accent); }
+    .search-input::placeholder { color: var(--gray-400); }
+
+    .select-wrap { position: relative; }
+
+    .select-wrap select {
+      height: 38px;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      padding: 0 30px 0 12px;
+      font-size: 13px; color: var(--gray-600);
+      background: var(--white); outline: none;
+      appearance: none; cursor: pointer;
+      min-width: 130px; font-family: inherit;
+      transition: border-color 0.15s;
+    }
+
+    .select-wrap select:focus { border-color: var(--accent); }
+
+    .select-wrap svg {
+      position: absolute; right: 9px; top: 50%;
+      transform: translateY(-50%); pointer-events: none; color: var(--gray-400);
+    }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      background: var(--white);
+      border: 1px solid var(--gray-100);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead { background: var(--gray-50); }
+
+    thead th {
+      padding: 12px 16px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.6px; text-transform: uppercase;
+      color: var(--gray-500); text-align: left;
+      border-bottom: 1px solid var(--gray-100);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--gray-100);
+      transition: background 0.12s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #F7F9FF; }
+
+    tbody td {
+      padding: 13px 16px;
+      font-size: 13px; color: var(--black);
+      vertical-align: middle;
+    }
+
+    td.bold { font-weight: 700; }
+    td.muted { color: var(--gray-400); }
+
+    /* ── STATUS DOTS ── */
+    .status-cell {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%; flex-shrink: 0;
+    }
+
+    .dot-active      { background: var(--success); }
+    .dot-idle        { background: var(--gray-300); }
+    .dot-maintenance { background: var(--warning); }
+    .dot-offduty     { background: var(--gray-400); }
+    .dot-unassigned  { background: var(--gray-200); }
+
+    .status-active      { color: var(--success); }
+    .status-idle        { color: var(--gray-400); }
+    .status-maintenance { color: var(--warning); }
+    .status-offduty     { color: var(--gray-500); }
+    .status-unassigned  { color: var(--gray-300); }
+
+    /* ── EMPTY ROW ── */
+    .empty-row td {
+      text-align: center;
+      padding: 28px;
+      color: var(--gray-400);
+      font-size: 14px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--gray-100);
+      padding: 16px 40px;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      font-size: 12px; color: var(--gray-400);
+    }
+
+    .footer-links { display: flex; gap: 22px; }
+    .footer-links a { color: var(--gray-400); text-decoration: none; }
+    .footer-links a:hover { color: var(--gray-600); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .metrics-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .page-body { padding: 24px 16px; }
+      .metrics-row { grid-template-columns: repeat(2, 1fr); }
+      .table-wrap { overflow-x: auto; }
+      table { min-width: 560px; }
+      .search-input { width: 160px; }
+      footer { flex-direction: column; gap: 10px; text-align: center; padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">Transitkey</a>
+        <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="route_assignment.html">Route</a></li>
+      <li><a href="operator_fleet.html" class="active">Details</a></li>
+      <li><a href="logged_expenses.html">Expenses</a></li>
+      <li><a href="operator_map.html">Map</a></li>
+      <li><a href="operator_complaints.html">Reports</a></li>
+      <li><a href="#">Notification</a></li>
+      <li><a href="#">Profile</a></li>
+    </ul>
+    <div class="nav-right">
+      <span class="nav-clock" id="navClock"></span>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#">Home</a>
+    <a href="#">Route</a>
+    <a href="#" class="active">Details</a>
+    <a href="#">Map</a>
+    <a href="#">Report</a>
+    <a href="#">Notification</a>
+    <a href="#">Profile</a>
+  </div>
+
+  <!-- PAGE -->
+  <div class="page-body">
+
+    <div class="page-header">
+      <div>
+        <h1>Fleet & Drivers Overview</h1>
+        <p>All company buses and drivers at a glance.</p>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics-row" id="metricsRow"></div>
+
+    <!-- BUSES TABLE -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Buses</h2>
+        <div class="section-actions">
+          <input type="text" class="search-input" id="busSearch" placeholder="Search plate or model..." oninput="renderBuses()" />
+          <div class="select-wrap">
+            <select id="busStatusFilter" onchange="renderBuses()">
+              <option value="">All Statuses</option>
+              <option value="On Route">On Route</option>
+              <option value="Idle">Idle</option>
+              <option value="Maintenance">Maintenance</option>
+            </select>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Plate Number</th>
+              <th>Model</th>
+              <th>Capacity</th>
+              <th>Assigned Driver</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="busTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DRIVERS TABLE -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Drivers</h2>
+        <div class="section-actions">
+          <input type="text" class="search-input" id="driverSearch" placeholder="Search name or ID..." oninput="renderDrivers()" />
+          <div class="select-wrap">
+            <select id="driverStatusFilter" onchange="renderDrivers()">
+              <option value="">All Statuses</option>
+              <option value="Active">Active</option>
+              <option value="Idle">Idle</option>
+              <option value="Off Duty">Off Duty</option>
+              <option value="Unassigned">Unassigned</option>
+            </select>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Driver Name</th>
+              <th>Driver ID</th>
+              <th>Phone</th>
+              <th>Assigned Bus</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="driverTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>&#64; 2026 Transitkey. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Help Center</a>
+    </div>
+  </footer>
+
+  <script src="operator_fleet.js"></script>
+</body>
+</html>

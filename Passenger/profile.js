@@ -6,6 +6,7 @@ import {
   isValidPhone,
   clearError,
   showToast,
+  postMidWife,
 } from "./script.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -46,6 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
     'input[placeholder="name@gmail.com"]',
   );
   const editBtn = document.querySelector("button.bg-\\[\\#93C5FD\\]");
+  let profileName;
+  let profilePhone;
+  let profileEmail;
 
   let isEditing = false;
 
@@ -77,6 +81,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!nameInput?.value.trim()) {
       showError(nameInput, "Full name is required.");
       hasError = true;
+    } else {
+      profileName = nameInput.value.trim();
     }
 
     if (!phoneInput?.value.trim()) {
@@ -85,6 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (!isValidPhone(phoneInput.value)) {
       showError(phoneInput, "Enter a valid Nigerian phone number.");
       hasError = true;
+    } else {
+      profilePhone = phoneInput.value.trim();
     }
 
     if (!emailInput?.value.trim()) {
@@ -93,6 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (!isValidEmail(emailInput.value)) {
       showError(emailInput, "Enter a valid email address.");
       hasError = true;
+    } else {
+      profileEmail = emailInput.value.trim();
     }
 
     if (!hasError) {
@@ -109,6 +119,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       // Backend would save changes here
+      try {
+        let updatingProfile = await postMidWife("","POST",{"Content-Type":"application/json"},"include",)
+      } catch (error) {}
       showToast("Profile updated successfully!");
     }
   });
@@ -152,11 +165,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
-fetch("https://transitkey-backend.vercel.app/api/route")
-  .then((response) => {
-    return response.json();
-  })
-  .then((data) => {
-    console.log(data);
-  });
+// fetch("https://transitkey-backend.vercel.app/api/route")
+//   .then((response) => {
+//     return response.json();
+//   })
+//   .then((data) => {
+//     console.log(data);
+//   });

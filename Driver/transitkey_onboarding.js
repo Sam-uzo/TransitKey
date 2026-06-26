@@ -1,3 +1,11 @@
+// ══════════════════════════════════════════════
+    // ONBOARDING — replace with real API call when ready
+    // e.g. fetch('/api/auth/register', { method:'POST', body: JSON.stringify({...}) })
+    // ══════════════════════════════════════════════
+    const ONBOARDING_CONFIG = {
+      registerEndpoint: '/api/auth/register',  // POST
+      redirectOnSuccess: 'transitkey_dashboard.html',
+    };
 
     function handleRegister(e) {
       e.preventDefault();
