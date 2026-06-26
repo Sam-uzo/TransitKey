@@ -54,4 +54,30 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "./passenger-notification.html";
     });
   }
+
+    const sessionName = sessionStorage.getItem("name");
+    let anchors = document.querySelectorAll("a");
+    anchors.forEach((anchor) => {
+      navTags.forEach((tag) => {
+        if (anchor.href.includes(tag)) {
+          if (sessionName) {
+            anchor.href.includes("home")
+              ? (anchor.href = "./passenger-home.html")
+              : anchor.href.includes("route")
+                ? (anchor.href = "./passenger-route.html")
+                : anchor.href.includes("details")
+                  ? (anchor.href = "./passenger-details.html")
+                  : anchor.href.includes("map")
+                    ? (anchor.href = "./passenger-map.html")
+                    : anchor.href.includes("report")
+                      ? (anchor.href = "./passenger-report.html")
+                      : anchor.href.includes("notification")
+                        ? (anchor.href = "./passenger-notification.html")
+                        : anchor.href.includes("profile")
+                          ? (anchor.href = "./passenger-profile.html")
+                          : (anchor.href = "#");
+          }
+        }
+      });
+    });
 });

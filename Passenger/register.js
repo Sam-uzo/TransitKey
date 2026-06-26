@@ -133,15 +133,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     async function registerUser() {
       await postMidWife(
-        "https://transitkey-backend.vercel.app/api/auth/register",
+        "https://transitkey-be.onrender.com/api/auth/passenger/register",
         "POST",
         { "Content-Type": "application/json" },
         "include",
         {
-          name: name,
+          full_name: name,
           email: email,
-          number: phone,
+          phone_number: phone,
           password: password1,
+          confirmPassword:password1
+          
         },
       )
         .then((response) => {
@@ -149,16 +151,20 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then((data) => {
           console.log(data);
-          if (data.message == "Success") {
+          if (data.message == "User created") {
             showToast(`${data.message}! Redirecting to login...`);
             setTimeout(() => {
               window.location.href = "./passenger-login.html";
             }, 1800);
-          }else{
-            showToast(`${data.message}`,"failure")
+          } else {
+            showToast(`${data.message}`, "failure");
           }
-        }).catch(error=>{
-          showToast("Sorry! There was a problem creating this account","failure")
+        })
+        .catch((error) => {
+          showToast(
+            "Sorry! There was a problem creating this account",
+            "failure",
+          );
         });
 
 
