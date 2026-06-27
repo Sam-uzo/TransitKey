@@ -63,15 +63,15 @@ document.addEventListener("DOMContentLoaded", () => {
             { "Content-Type": "application/json" },
             "include",
             loginEmail.includes("@")
-              ? { email: loginEmail, password: loginPassword }
-              : { number: loginEmail, password: loginPassword },
+              ? { identifier: loginEmail, password: loginPassword }
+              : { identifier: loginEmail, password: loginPassword },
           );
 
           userDetails = await response.json();
 
           console.log(userDetails);
-          if (userDetails.message == "Success") {
-            showToast(`${userDetails.message}!`);
+          if (userDetails.user.user_role.toLowerCase() == "passenger") {
+            showToast(`Success!`);
             console.log(userDetails.user.name, userDetails.user.number);
             sessionStorage.setItem("name", userDetails.user.name);
             sessionStorage.setItem("number", userDetails.user.number);
@@ -79,8 +79,8 @@ document.addEventListener("DOMContentLoaded", () => {
               window.location.href = "./passenger-home.html";
             }, 1500);
           } else {
-            console.log(userDetails.message);
-            showToast(`${userDetails.message}`);
+            console.log(userDetails.error);
+            showToast(`${userDetails.error}`);
             sessionStorage.clear();
           }
         } catch (error) {

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transitkey - Fleet Inventory</title>
+  <link rel="stylesheet" href="common.css">
+  <style>
+    /* Metrics Row */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .metric-card {
+      background-color: #ffffff;
+      border: 1px solid #000000;
+      border-radius: 4px;
+      padding: 24px;
+    }
+    
+    .metric-card .title {
+      font-size: 13px;
+      color: #475569;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .metric-card .value {
+      font-size: 40px;
+      font-weight: 700;
+      color: #000000;
+      line-height: 1;
+    }
+    
+    .metric-card.danger-val .value {
+      color: var(--danger-color);
+    }
+
+    /* Filters Bar */
+    .filter-bar {
+      background-color: #ffffff;
+      border: 1px solid #000000;
+      border-radius: 4px;
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    
+    .filter-search-group {
+      flex: 2;
+      position: relative;
+    }
+
+    .filter-search-group svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+    }
+
+    .filter-search-group input {
+      padding-left: 40px;
+    }
+
+    .filter-select-group {
+      flex: 1;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      font-size: 15px;
+      outline: none;
+      color: #475569;
+      background-color: #ffffff;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+    }
+
+    /* Table Container */
+    .table-container {
+      background-color: #ffffff;
+      border: 1px solid #000000;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    /* Statuses */
+    .status-healthy {
+      color: #000000;
+    }
+
+    .status-urgent {
+      color: var(--danger-color);
+      font-weight: 600;
+    }
+
+    .status-required {
+      color: #000000;
+    }
+
+    .badge-status {
+      display: inline-block;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      border-radius: 4px;
+      text-align: center;
+      border: 1px solid #000000;
+      color: #000000;
+      min-width: 150px;
+    }
+
+    .badge-status.active {
+      border-color: #000000;
+      color: #000000;
+    }
+
+    .badge-status.maintenance {
+      border-color: var(--danger-color);
+      color: var(--danger-color);
+    }
+
+    .badge-status.idle {
+      border-color: #000000;
+      color: #000000;
+    }
+
+    .text-unassigned {
+      font-style: italic;
+      color: #475569;
+    }
+
+    /* Table Footer / Pagination */
+    .table-footer {
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #ffffff;
+      border-top: 1px solid #cbd5e1;
+    }
+
+    .showing-text {
+      font-size: 14px;
+      color: #000000;
+    }
+
+    .pagination {
+      display: flex;
+      gap: 8px;
+    }
+
+    .page-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #cbd5e1;
+      background-color: #ffffff;
+      color: #000000;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .page-btn.active {
+      background-color: #000000;
+      border-color: #000000;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .page-btn.disabled {
+      color: #94a3b8;
+      cursor: not-allowed;
+      border-color: #e2e8f0;
+    }
+
+    /* Bottom Section Layout */
+    .bottom-section {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    /* Alerts Box */
+    .alerts-widget {
+      background-color: #ffffff;
+      border: 1px solid #000000;
+      border-radius: 4px;
+      padding: 24px;
+      width: 400px;
+    }
+
+    .alerts-widget h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #000000;
+      margin-bottom: 20px;
+    }
+
+    .alert-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #cbd5e1;
+    }
+
+    .alert-row:last-of-type {
+      border-bottom: none;
+      margin-bottom: 16px;
+    }
+
+    .alert-icon {
+      color: #000000;
+      font-size: 18px;
+      margin-top: 2px;
+    }
+
+    .alert-content {
+      flex: 1;
+    }
+
+    .alert-content .alert-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #000000;
+      margin-bottom: 4px;
+    }
+
+    .alert-content .alert-desc {
+      font-size: 12px;
+      color: #000000;
+      line-height: 1.4;
+    }
+
+    .view-all-link {
+      display: block;
+      text-align: center;
+      color: #000000;
+      text-decoration: underline;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <a href="dashboard.html" class="logo">Transitkey</a>
+    <ul class="nav-links">
+      <li><a href="dashboard.html">Home</a></li>
+      <li><a href="driver-management.html">Route</a></li>
+      <li><a href="vehicle-management.html" style="color: var(--primary-color);">Details</a></li>
+      <li><a href="#">Map</a></li>
+      <li><a href="expenses.html">Report</a></li>
+      <li><a href="#">Notification</a></li>
+      <li><a href="#">Profile</a></li>
+    </ul>
+    <a href="login.html" class="auth-btn">Sign-up / Login</a>
+  </header>
+
+  <!-- Fleet Inventory Main Content -->
+  <main class="main-content">
+    
+    <!-- Title & Action Button -->
+    <div class="dashboard-header">
+      <div class="dashboard-title">
+        <h1>Fleet Inventory</h1>
+        <p>Manage and monitor all vehicles</p>
+      </div>
+      <button class="btn-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add New Bus
+      </button>
+    </div>
+
+    <!-- Metrics Row -->
+    <div class="metrics-row">
+      <!-- Total Units -->
+      <div class="metric-card">
+        <div class="title">Total Units</div>
+        <div class="value">148</div>
+      </div>
+      
+      <!-- Active -->
+      <div class="metric-card">
+        <div class="title">Active</div>
+        <div class="value">132</div>
+      </div>
+      
+      <!-- Total Units (Danger) -->
+      <div class="metric-card danger-val">
+        <div class="title">Total Units</div>
+        <div class="value">9</div>
+      </div>
+
+      <!-- Total Units -->
+      <div class="metric-card">
+        <div class="title">Total Units</div>
+        <div class="value">7</div>
+      </div>
+    </div>
+
+    <!-- Filters Bar -->
+    <div class="filter-bar">
+      <div class="filter-search-group">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="form-control" placeholder="Search by vehicle ID or driver">
+      </div>
+
+      <div class="filter-select-group">
+        <select class="filter-select">
+          <option>All Statuses</option>
+          <option>Active</option>
+          <option>In Maintenance</option>
+          <option>Idle</option>
+        </select>
+      </div>
+
+      <div class="filter-select-group">
+        <select class="filter-select">
+          <option>Maintenance</option>
+          <option>Healthy</option>
+          <option>Urgent</option>
+          <option>Service required</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Fleet Table -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Vehicle ID</th>
+            <th>Assigned Driver</th>
+            <th>Maintenance Status</th>
+            <th>Actions</th>
+            <th>Vehicle Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>BUS-774</td>
+            <td>Adewale Lawal</td>
+            <td class="status-healthy">Healthy</td>
+            <td><span class="link-view">View Details</span></td>
+            <td><span class="badge-status active">Active</span></td>
+          </tr>
+          <tr>
+            <td>BUS-102</td>
+            <td class="text-unassigned">Unassigned</td>
+            <td class="status-urgent">Urgent</td>
+            <td><span class="link-view">Schedule Service</span></td>
+            <td><span class="badge-status maintenance">In Maintenance</span></td>
+          </tr>
+          <tr>
+            <td>BUS-345</td>
+            <td>Chinedu Eze</td>
+            <td class="status-required">Service required</td>
+            <td><span class="link-view">Dispatch</span></td>
+            <td><span class="badge-status idle">Idle</span></td>
+          </tr>
+          <tr>
+            <td>BUS-125</td>
+            <td>Musa Ali</td>
+            <td class="status-healthy">Healthy</td>
+            <td><span class="link-view">View Details</span></td>
+            <td><span class="badge-status active">Active</span></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <!-- Table Footer / Pagination -->
+      <div class="table-footer">
+        <div class="showing-text">Showing 1-4 of 148 Units</div>
+        <div class="pagination">
+          <button class="page-btn disabled">&lt;</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">&gt;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section (System Alerts Widget) -->
+    <div class="bottom-section">
+      <div class="alerts-widget">
+        <h3>System Alerts</h3>
+        <div class="alert-row">
+          <span class="alert-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </span>
+          <div class="alert-content">
+            <div class="alert-title">Issue #4421</div>
+            <div class="alert-desc">Air conditioning malfunction reported on LAG-9901-B</div>
+          </div>
+        </div>
+        <div class="alert-row">
+          <span class="alert-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </span>
+          <div class="alert-content">
+            <div class="alert-title">Issue #4421</div>
+            <div class="alert-desc">Air conditioning malfunction reported on LAG-9901-B</div>
+          </div>
+        </div>
+        <div class="alert-row">
+          <span class="alert-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </span>
+          <div class="alert-content">
+            <div class="alert-title">Issue #4421</div>
+            <div class="alert-desc">Air conditioning malfunction reported on LAG-9901-B</div>
+          </div>
+        </div>
+        <a href="#" class="view-all-link">View all notifications</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <span>@ 2026 Transitkey. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Help Center</a>
+    </div>
+  </footer>
+
+</body>
+</html>

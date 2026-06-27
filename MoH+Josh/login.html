@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transitkey - Operator Login</title>
+  <link rel="stylesheet" href="common.css">
+  <style>
+    .auth-card h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #000000;
+      margin-bottom: 8px;
+    }
+    .auth-card p.subtitle {
+      color: #000000;
+      font-size: 15px;
+      margin-bottom: 30px;
+    }
+    .forgot-password {
+      display: inline-block;
+      margin-bottom: 24px;
+      color: #475569;
+      text-decoration: underline;
+      font-size: 15px;
+    }
+    .forgot-password:hover {
+      color: var(--primary-color);
+    }
+    .auth-card .btn-primary {
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      margin-bottom: 24px;
+    }
+    .signup-redirect {
+      text-align: center;
+      font-size: 15px;
+      color: var(--primary-color);
+    }
+    .signup-redirect a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .signup-redirect a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <a href="dashboard.html" class="logo">Transitkey</a>
+    <ul class="nav-links">
+      <li><a href="dashboard.html">Home</a></li>
+      <li><a href="#">Route</a></li>
+      <li><a href="#">Details</a></li>
+      <li><a href="#">Map</a></li>
+      <li><a href="expenses.html">Report</a></li>
+      <li><a href="#">Notification</a></li>
+      <li><a href="#">Profile</a></li>
+    </ul>
+    <a href="login.html" class="auth-btn">Sign-up / Login</a>
+  </header>
+
+  <!-- Login Main Content -->
+  <main class="main-content auth-container">
+    <div class="auth-card">
+      <h2>Operator Login</h2>
+      <p class="subtitle">Access TransitKey command center.</p>
+      
+      <form action="dashboard.html" method="GET">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="name@gmail.com" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control" placeholder="*** *** ***" required>
+        </div>
+        
+        <a href="#" class="forgot-password">Forgot Password?</a>
+        
+        <button type="submit" class="btn-primary">Sign In</button>
+        
+        <p class="signup-redirect">
+          Don’t have an account? <a href="signup.html">Sign Up</a>
+        </p>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <span>@ 2026 Transitkey. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Help Center</a>
+    </div>
+  </footer>
+
+</body>
+</html>

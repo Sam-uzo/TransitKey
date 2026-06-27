@@ -71,33 +71,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // const sessionName = sessionStorage.getItem("name");
-  // let anchors = document.querySelectorAll("a");
-  // anchors.forEach((anchor) => {
-  //   navTags.forEach((tag) => {
-  //     if (anchor.href.includes(tag)) {
-  //       anchor.addEventListener("click", () => {
-  //         if (sessionName != null && sessionName != undefined) {
-  //           anchor.href.includes("home")
-  //             ? (anchor.href = "./passenger-home.html")
-  //             : anchor.href.includes("route")
-  //               ? (anchor.href = "./Passenger-route.html")
-  //               : anchor.href.includes("details")
-  //                 ? (anchor.href = "./passenger-details.html")
-  //                 : anchor.href.includes("map")
-  //                   ? (anchor.href = "./passenger-map.html")
-  //                   : anchor.href.includes("report")
-  //                     ? (anchor.href = "./passenger-report.html")
-  //                     : anchor.href.includes("notification")
-  //                       ? (anchor.href = "./passenger-notification.html")
-  //                       : anchor.href.includes("profile")
-  //                         ? (anchor.href = "./passenger-profile.html")
-  //                         : (anchor.href = "#");
-  //         }else{
-  //           showToast("Must Login","failure");
-  //         }
-  //       });
-  //     }
-  //   });
-  // });
+  const sessionName = sessionStorage.getItem("name");
+  let anchors = document.querySelectorAll("a");
+  anchors.forEach((anchor) => {
+    navTags.forEach((tag) => {
+      if (anchor.href.includes(tag)) {
+        anchor.addEventListener("click", () => {
+          if (sessionName == null && sessionName == undefined) {
+            setTimeout(() => {
+              showToast("Must Login", "failure");
+            }, 1000);
+            anchor.href.includes("home")
+              ? (anchor.href = "./passenger-login.html")
+              : anchor.href.includes("route")
+                ? (anchor.href = "./passenger-login.html")
+                : anchor.href.includes("details")
+                  ? (anchor.href = "./passenger-login.html")
+                  : anchor.href.includes("map")
+                    ? (anchor.href = "./passenger-login.html")
+                    : anchor.href.includes("report")
+                      ? (anchor.href = "./passenger-login.html")
+                      : anchor.href.includes("notification")
+                        ? (anchor.href = "./passenger-login.html")
+                        : anchor.href.includes("profile")
+                          ? (anchor.href = "./passenger-login.html")
+                          : (anchor.href = "#");
+          } else {
+            setTimeout(() => {
+              showToast("You've log-in successfully", "success");
+            }, 1000);
+          }
+        });
+      }
+    });
+  });
 });
